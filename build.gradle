@@ -2,8 +2,9 @@
 
 buildscript {
     ext{
-        rxjava = '3.0.2'
-        rxandroid= '3.0.0'
+        rx_java = '3.0.2'
+        rx_android= '3.0.0'
+        dagger = '2.27'
         kotlin_version = '1.3.71'
     }
 
