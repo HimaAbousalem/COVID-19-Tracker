@@ -1,6 +1,7 @@
-package com.iti.mobile.covid19tracker.dagger.module.app
+package com.iti.mobile.covid19tracker.dagger.modules.app
 
 import android.app.Application
+import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.utils.HTTP_CACHE_DIR
 import com.iti.mobile.covid19tracker.utils.HTTP_CACHE_SIZE
 import dagger.Module
@@ -11,25 +12,22 @@ import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 import java.io.File
 
-@Module
+@Module(includes = [ApplicationModule::class])
 class NetworkModule{
 
-    //@ApplicationScope
+    @ApplicationScope
     @Provides
-    fun getOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, cache: Cache): OkHttpClient {
-        return OkHttpClient.Builder()
+    fun getOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, cache: Cache) =
+        OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .cache(cache)
             .build()
-    }
 
-   // @ApplicationScope
+    @ApplicationScope
     @Provides
-    fun cache(context: Application): Cache {
-        return Cache(File(context.cacheDir, HTTP_CACHE_DIR), HTTP_CACHE_SIZE.toLong())
-    }
+    fun cache(context: Application) = Cache(File(context.cacheDir, HTTP_CACHE_DIR), HTTP_CACHE_SIZE.toLong())
 
-   // @ApplicationScope
+    @ApplicationScope
     @Provides
     fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val logging = HttpLoggingInterceptor { message -> Timber.d(message) }

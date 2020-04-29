@@ -1,4 +1,4 @@
-package com.iti.mobile.covid19tracker.base
+package com.iti.mobile.covid19tracker.features.base
 
 import android.app.Application
 
