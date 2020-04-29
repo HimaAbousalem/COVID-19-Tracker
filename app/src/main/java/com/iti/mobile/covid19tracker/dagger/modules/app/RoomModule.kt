@@ -9,13 +9,13 @@ import dagger.Module
 import dagger.Provides
 
 @Module(includes = [ApplicationModule::class])
-public class RoomModule {
+ class RoomModule {
     @ApplicationScope
     @Provides
     fun provideLocalDatabase (mApplication: Application) : LocalDatabase{
         return androidx.room.Room
             .databaseBuilder(mApplication,LocalDatabase::class.java, DATABASE_NAME)
-           // .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()
     }

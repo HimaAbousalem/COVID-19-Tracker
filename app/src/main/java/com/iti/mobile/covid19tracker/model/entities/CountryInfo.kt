@@ -2,17 +2,17 @@ package com.iti.mobile.covid19tracker.model.entities
 
 import com.squareup.moshi.Json
 
-data class CountryInfo(
+ data class CountryInfo(
 
         @field:Json(name ="_id")
-        var _id: Int?,
+        var _id: Int = 0,
 
         @field:Json(name ="lat")
-        var lat: Int? ,
+        var lat: Int = 0,
 
         @field:Json(name ="long")
-        var long: Int? ,
+        var long: Int = 0,
 
         @field:Json(name ="flag")
-        var flag: String?
+        var flag: String = ""
 )
