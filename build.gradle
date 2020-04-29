@@ -2,6 +2,7 @@
 
 buildscript {
     ext{
+        retrofit = '2.8.1'
         rx_java = '3.0.2'
         rx_android= '3.0.0'
         dagger = '2.27'
