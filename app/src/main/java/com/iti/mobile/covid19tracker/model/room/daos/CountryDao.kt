@@ -6,6 +6,7 @@ import io.reactivex.Single
 
 @Dao
 interface CountryDao {
+
     @get:Query("SELECT * FROM countries")
     val allCountries: Single<List<Country>>
 

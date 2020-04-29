@@ -10,17 +10,8 @@ import java.util.concurrent.Executors
 
 @Database(
     entities = [Country::class],
-    version = 1
-)
-//@TypeConverters(
-//    DateConverter::class
-//)
+    version = 1,
+    exportSchema = false)
 abstract class LocalDatabase : RoomDatabase() {
    abstract val countryDao : CountryDao
-
-    companion object {
-        private const val NUMBER_OF_THREADS = 4
-        val databaseWriteExecutor =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS)
-    }
 }
