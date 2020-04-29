@@ -16,7 +16,7 @@ class RoomModule {
         return androidx.room.Room
             .databaseBuilder(mApplication,LocalDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration()
-           // .allowMainThreadQueries()
+            .allowMainThreadQueries()
             .build()
     }
 

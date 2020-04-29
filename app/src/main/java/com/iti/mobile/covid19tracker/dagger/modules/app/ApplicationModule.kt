@@ -11,4 +11,6 @@ class ApplicationModule (private var mApplication: Application) {
     @ApplicationScope
     @Provides
     fun provideApplication() = mApplication
+
+
 }
