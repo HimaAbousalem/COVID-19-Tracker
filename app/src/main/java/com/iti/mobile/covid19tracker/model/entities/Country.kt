@@ -1,63 +1,67 @@
 package com.iti.mobile.covid19tracker.model.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
+import androidx.room.*
+import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
 import com.squareup.moshi.Json
 
-@Entity(tableName = "countries")
+@Entity(tableName = "countries" , indices = arrayOf(Index(value = ["country"])))
 data class Country (
 
-    @ColumnInfo(name = "updated")
+    var subscribtion : Int = UN_SUBSCRIBED ,
+
+    @field:Json (name = "updates")
     var updated : Long? = null,
 
-    @ColumnInfo(name = "country")
-    var country : String? = null,
+    @PrimaryKey
+    @field:Json (name = "country")
+    var country : String?= null ,
 
+    @Embedded
     @field:Json(name = "countryInfo")
-    private val countryInfo: CountryInfo? = null,
+    var countryInfo: CountryInfo?= null,
 
     @field:Json(name ="cases")
-    private val cases: Int? = null,
+    var cases: Int?= null,
 
     @field:Json(name ="todayCases")
-    private val todayCases: Int? = null,
+    var todayCases: Int?= null,
 
     @field:Json(name ="deaths")
-    private val deaths: Int? = null,
+    var deaths: Int? = null,
 
     @field:Json(name ="todayDeaths")
-    private val todayDeaths: Int? = null,
+    var todayDeaths: Int?= null,
 
     @field:Json(name ="recovered")
-    private val recovered: Int? = null,
+    var recovered: Int?= null,
 
     //can be changed
     @field:Json(name ="active")
     @Ignore
-    private val active: Int? = null,
+    var active: Int? = null,
 
     @field:Json(name ="critical")
     @Ignore
-    private val critical: Int? = null,
+    var critical: Int? = null,
 
     @field:Json(name ="casesPerOneMillion")
     @Ignore
-    private val casesPerOneMillion: Int? = null,
+    var casesPerOneMillion: Int? = null,
 
     @field:Json(name ="deathsPerOneMillion")
     @Ignore
-    private val deathsPerOneMillion: Int? = null,
+    var deathsPerOneMillion: Int? = null,
 
     @field:Json(name ="tests")
     @Ignore
-    private val tests: Int? = null,
+    var tests: Int? = null,
 
     @field:Json(name ="testsPerOneMillion")
     @Ignore
-    private val testsPerOneMillion: Int? = null,
+    var testsPerOneMillion: Int? = null,
 
     @field:Json(name ="continent")
-    private val continent: String? = null
+    @Ignore
+    var continent: String? = null
 )
 
