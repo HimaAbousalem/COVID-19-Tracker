@@ -16,8 +16,7 @@ class DataRepository @Inject constructor(
                .publish {network ->
                     Observable.merge(
                          network,
-                         localDataSource.allCountries()
-                              .takeUntil(network)
+                         localDataSource.allCountries().takeUntil(network)
                     )
                }
      }

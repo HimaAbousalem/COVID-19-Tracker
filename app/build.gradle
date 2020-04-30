@@ -5,10 +5,12 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
-    viewBinding.enabled = true
+    viewBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.iti.mobile.covid19tracker"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

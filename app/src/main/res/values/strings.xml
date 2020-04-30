@@ -6,4 +6,8 @@
     <string name="no_subscriptions">No Subscriptions yet, you can go to Countries and click on subscribe Button.</string>
     <string name="no_internet">No Internet Connection.</string>
     <string name="retry">Retry again</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="countries">Countries</string>
+    <string name="map">Map</string>
+    <string name="settings">Settings</string>
 </resources>

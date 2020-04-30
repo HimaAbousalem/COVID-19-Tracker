@@ -3,13 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainActivity">
-
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.iti.mobile.covid19tracker.features.base.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+    app:startDestination="@id/allCountriesFragment">
     <fragment
         android:id="@+id/allCountriesFragment"
         android:name="com.iti.mobile.covid19tracker.features.all_countries.AllCountriesFragment"
@@ -20,4 +14,9 @@
         android:name="com.iti.mobile.covid19tracker.features.subscriptions.SubscriptionsFragment"
         android:label="fragment_subscriptions"
         tools:layout="@layout/fragment_subscriptions" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.iti.mobile.covid19tracker.features.mapView.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 </navigation>

@@ -6,7 +6,6 @@ import com.iti.mobile.covid19tracker.dagger.modules.app.ViewModelFactoryModule
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.features.base.Covid19App
-import com.iti.mobile.covid19tracker.features.base.MainActivity
 import dagger.Component
 
 @ApplicationScope

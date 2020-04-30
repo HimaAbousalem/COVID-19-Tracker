@@ -5,6 +5,6 @@
         android:id="@+id/settingsMenuItem"
         android:orderInCategory="100"
         android:icon="@drawable/ic_settings_color_24dp"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="always"/>
 </menu>
