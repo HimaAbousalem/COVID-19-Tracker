@@ -10,12 +10,12 @@ data class Country (
     @Transient
     var subscribtion : Int = UN_SUBSCRIBED,
 
-    @field:Json (name = "updates")
+    @field:Json (name = "updated")
     var updated : Long = 0,
     @NonNull
     @PrimaryKey
     @field:Json (name = "country")
-    var country : String = "" ,
+    var country : String = "",
 
     @Embedded(prefix = "countryInfo_")
     @field:Json(name = "countryInfo")

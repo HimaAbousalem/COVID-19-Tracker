@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class AllResults(
 
-    @field:Json(name = "updates")
+    @field:Json(name = "updated")
     var updated : Long,
 
     @field:Json(name ="cases")
