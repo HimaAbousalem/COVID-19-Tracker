@@ -1,6 +1,5 @@
 package com.iti.mobile.covid19tracker.model.room
 
-import android.app.Application
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.model.room.daos.CountryDao
