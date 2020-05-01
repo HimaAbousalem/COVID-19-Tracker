@@ -4,13 +4,35 @@ import android.content.SharedPreferences
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.utils.*
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 
 @ApplicationScope
-class SharedPreference @Inject constructor(private val sharedPref: SharedPreferences) {
+class SharedPreferenceHandler @Inject constructor(private val sharedPref: SharedPreferences) {
     private lateinit var editor: SharedPreferences.Editor
+    private lateinit var sharedPreferenceObserver:BehaviorSubject<SharedPreferences>
+
+    val prefChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
+            sharedPreferenceObserver.onNext(sharedPreferences)
+        }
+
+    init {
+        sharedPreferenceObserver = BehaviorSubject.createDefault(sharedPref)
+        sharedPref.registerOnSharedPreferenceChangeListener(prefChangeListener)
+    }
+
+    fun observingSharedPreferenceDataChange():Observable<AllResults>{
+        return sharedPreferenceObserver
+            .map { shared -> AllResults(shared.getLong(UPDATED, 0)
+            ,shared.getInt(ALL_CASES,0),shared.getInt(TODAY_CASES, 0)
+            ,shared.getInt(ALL_DEATHS,0), shared.getInt(TODAY_DEATHS,0)
+            , shared.getInt(ALL_RECOVERED,0)) }
+    }
+
     fun saveAllCountriesResult(allResults: AllResults) {
         editor = sharedPref.edit()
         editor.putInt(ALL_CASES, allResults.cases)
