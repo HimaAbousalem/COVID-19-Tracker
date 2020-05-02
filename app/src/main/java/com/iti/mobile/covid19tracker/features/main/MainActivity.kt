@@ -1,5 +1,6 @@
 package com.iti.mobile.covid19tracker.features.main
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -17,7 +18,6 @@ import com.iti.mobile.covid19tracker.databinding.ActivityMainBinding
 import com.iti.mobile.covid19tracker.features.all_countries.AllCountriesFragment
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.model.room.LocalDataSource
-import com.iti.mobile.covid19tracker.model.shared_prefrence.SharedPreference
 import com.jakewharton.rxbinding2.widget.RxSearchView
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var localDataSource: LocalDataSource
     @Inject
-    lateinit var sharedPreference: SharedPreference
+    lateinit var sharedPreference: SharedPreferences
      lateinit var allCountriesFragment: AllCountriesFragment
     lateinit var  navController: NavController
     lateinit var compositeDisposable: CompositeDisposable
