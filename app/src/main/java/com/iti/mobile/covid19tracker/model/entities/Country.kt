@@ -2,7 +2,6 @@ package com.iti.mobile.covid19tracker.model.entities
 
 import androidx.annotation.NonNull
 import androidx.room.*
-import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
 import com.squareup.moshi.Json
 
 @Entity(tableName = "countries" , indices = [Index(value = ["country"])])

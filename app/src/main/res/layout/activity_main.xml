@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/retry"
                 android:textColor="@color/colorPrimary"
-                android:visibility="gone" />
+                android:visibility="invisible" />
         </LinearLayout>
 
 
