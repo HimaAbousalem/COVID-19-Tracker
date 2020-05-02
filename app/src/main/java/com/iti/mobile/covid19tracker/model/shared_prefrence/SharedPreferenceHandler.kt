@@ -1,6 +1,8 @@
 package com.iti.mobile.covid19tracker.model.shared_prefrence
 
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.utils.*
@@ -11,26 +13,15 @@ import javax.inject.Inject
 @ApplicationScope
 class SharedPreferenceHandler @Inject constructor(private val sharedPref: SharedPreferences) {
     private lateinit var editor: SharedPreferences.Editor
-//    private lateinit var sharedPreferenceObserver:BehaviorSubject<SharedPreferences>
-//
-//    val prefChangeListener =
-//        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
-//            sharedPreferenceObserver.onNext(sharedPreferences)
-//        }
-//
-//    init {
-//        sharedPreferenceObserver = BehaviorSubject.createDefault(sharedPref)
-//        sharedPref.registerOnSharedPreferenceChangeListener(prefChangeListener)
-//    }
-//
-//    fun observingSharedPreferenceDataChange():Observable<AllResults>{
-//        return sharedPreferenceObserver
-//            .throttleLast(3, TimeUnit.SECONDS)
-//            .map { shared -> AllResults(shared.getLong(UPDATED, 0)
-//            ,shared.getInt(ALL_CASES,0),shared.getInt(TODAY_CASES, 0)
-//            ,shared.getInt(ALL_DEATHS,0), shared.getInt(TODAY_DEATHS,0)
-//            , shared.getInt(ALL_RECOVERED,0)) }
-//    }
+    private val liveData = MutableLiveData<AllResults>()
+    private val prefChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
+            liveData.postValue(getAllCountriesResults(sharedPreferences))
+        }
+
+    init {
+        sharedPref.registerOnSharedPreferenceChangeListener(prefChangeListener)
+    }
 
     fun saveAllCountriesResult(allResults: AllResults) {
         editor = sharedPref.edit()
@@ -43,12 +34,14 @@ class SharedPreferenceHandler @Inject constructor(private val sharedPref: Shared
         editor.apply()
     }
 
-    val allCountriesResults
-        get() = AllResults(sharedPref.getLong(UPDATED, 0)
-             ,sharedPref.getInt(ALL_CASES,0),sharedPref.getInt(TODAY_CASES, 0)
-             ,sharedPref.getInt(ALL_DEATHS,0), sharedPref.getInt(TODAY_DEATHS,0)
-             , sharedPref.getInt(ALL_RECOVERED,0))
+    fun getAllCountriesResultLiveData() = liveData
 
+    private fun getAllCountriesResults(sharedPref: SharedPreferences): AllResults {
+        return AllResults(sharedPref.getLong(UPDATED, 0)
+            ,sharedPref.getInt(ALL_CASES,0),sharedPref.getInt(TODAY_CASES, 0)
+            ,sharedPref.getInt(ALL_DEATHS,0), sharedPref.getInt(TODAY_DEATHS,0)
+            , sharedPref.getInt(ALL_RECOVERED,0))
+    }
 
     fun clearPref() {
         editor = sharedPref.edit()

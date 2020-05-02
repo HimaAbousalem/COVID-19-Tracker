@@ -15,12 +15,17 @@ import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
+import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -41,7 +46,6 @@ class AllCountriesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentAllCountriesBinding.inflate(layoutInflater)
         (activity?.application as Covid19App).appComponent.controllerComponent(ControllerModule(
             activity as AppCompatActivity
@@ -50,10 +54,20 @@ class AllCountriesFragment : Fragment() {
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
-        viewModel.getCountriesData("cases").observe(requireActivity(), Observer {data ->
+
+        //TODO we need to check if this is the firstTime or not!
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.updateDatabase()
+        }
+
+        viewModel.countriesData.observe(requireActivity(), Observer {data ->
             countriesList = data
             displayList = data as MutableList<Country>
             displayCountries(countriesList)
+        })
+
+        viewModel.allCountriesResult.observe(requireActivity(), Observer {
+            Timber.d(it.toString())
         })
 
         return binding.root

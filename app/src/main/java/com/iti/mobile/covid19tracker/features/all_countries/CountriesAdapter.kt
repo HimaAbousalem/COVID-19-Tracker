@@ -58,13 +58,13 @@ class CountriesAdapter(countries: List<Country>) :
         holder.deaths.text = countries[position].deaths.toString()
         holder.recovered.text = countries[position].recovered.toString()
         holder.subscribe.setOnClickListener{
-//          if (countries[position].subscribtion == SUBSCRIBED){
-//           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_miscellaneous)
-//              countries[position].subscribtion = UN_SUBSCRIBED
-//          }  else {
-//           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_globe)
-//              countries[position].subscribtion = SUBSCRIBED
-//          }
+          if (countries[position].subscription == SUBSCRIBED){
+           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_miscellaneous)
+              countries[position].subscription = UN_SUBSCRIBED
+          }  else {
+           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_globe)
+              countries[position].subscription = SUBSCRIBED
+          }
 
         }
     }

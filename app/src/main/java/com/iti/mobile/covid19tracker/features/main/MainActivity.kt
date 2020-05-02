@@ -53,9 +53,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = viewModelProvidersFactory.create(MainViewModel::class.java)
 
-        viewModel.getCountriesData("cases").observe(this, Observer {
-            it.forEach { Log.d("data", it.toString()) }
-        })
+//        viewModel.getCountriesData("cases").observe(this, Observer {
+//            it.forEach { Log.d("data", it.toString()) }
+//        })
 
     }
 

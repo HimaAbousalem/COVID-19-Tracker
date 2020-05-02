@@ -1,5 +1,6 @@
 package com.iti.mobile.covid19tracker.model.room.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.iti.mobile.covid19tracker.model.entities.Country
 
@@ -7,10 +8,13 @@ import com.iti.mobile.covid19tracker.model.entities.Country
 interface CountryDao {
 
     @Query("SELECT * FROM countries")
-    suspend fun getAllCountries(): List<Country>
+    fun getAllCountries(): LiveData<List<Country>>
+
+    @Query("SELECT * FROM countries where subscription = 1")
+    suspend fun getSubscribedCountries():List<Country>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCountry(country: Country)
+    suspend fun insertCountry(country: List<Country>)
 
     @Query("DELETE FROM countries WHERE country = :countryName")
     suspend fun deleteCountry(countryName: String)

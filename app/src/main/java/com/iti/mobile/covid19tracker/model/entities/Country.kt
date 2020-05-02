@@ -2,10 +2,13 @@ package com.iti.mobile.covid19tracker.model.entities
 
 import androidx.annotation.NonNull
 import androidx.room.*
+import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
 import com.squareup.moshi.Json
 
 @Entity(tableName = "countries" , indices = [Index(value = ["country"])])
 data class Country (
+
+    var subscribtion : Int = UN_SUBSCRIBED,
 
     @field:Json (name = "updated")
     var updated : Long = 0,

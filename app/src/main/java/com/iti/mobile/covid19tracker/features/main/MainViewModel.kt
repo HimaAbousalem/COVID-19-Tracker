@@ -15,11 +15,11 @@ class MainViewModel @Inject constructor(private val dataRepository: DataReposito
 //        emit(dataRepository.getCountries())
 //    }
 
-    fun getCountriesData(query: String):LiveData<List<Country>>{
-        return liveData {
-            emit(dataRepository.getCountries(query))
-        }
-    }
+//    fun getCountriesData(query: String):LiveData<List<Country>>{
+//        return liveData {
+//            emit(dataRepository.getCountries(query))
+//        }
+//    }
 
 //class MainViewModel @Inject constructor(private val dataRepository: DataRepository): ViewModel(){
 //     val allCountries = dataRepository.getCountriesData(SEARCH_BY_CASES)
