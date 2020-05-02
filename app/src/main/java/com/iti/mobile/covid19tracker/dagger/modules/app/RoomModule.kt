@@ -4,6 +4,7 @@ import android.app.Application
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.room.LocalDatabase
 import com.iti.mobile.covid19tracker.model.room.daos.CountryDao
+import com.iti.mobile.covid19tracker.model.room.daos.SubscriptionDao
 import com.iti.mobile.covid19tracker.utils.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,11 @@ class RoomModule {
     @Provides
     fun provideCountryDao (localDatabase: LocalDatabase) : CountryDao{
         return  localDatabase.countryDao
+    }
+
+    @ApplicationScope
+    @Provides
+    fun provideSubscriptionDao (localDatabase: LocalDatabase) : SubscriptionDao{
+        return  localDatabase.subscriptionDao
     }
 }

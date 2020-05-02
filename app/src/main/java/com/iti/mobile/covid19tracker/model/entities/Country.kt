@@ -7,8 +7,6 @@ import com.squareup.moshi.Json
 
 @Entity(tableName = "countries" , indices = [Index(value = ["country"])])
 data class Country (
-    @Transient
-    var subscribtion : Int = UN_SUBSCRIBED,
 
     @field:Json (name = "updated")
     var updated : Long = 0,
@@ -38,31 +36,24 @@ data class Country (
 
     //can be changed
     @field:Json(name ="active")
-    @Ignore
     var active: Int = 0,
 
     @field:Json(name ="critical")
-    @Ignore
     var critical: Int = 0,
 
     @field:Json(name ="casesPerOneMillion")
-    @Ignore
     var casesPerOneMillion: Int = 0,
 
     @field:Json(name ="deathsPerOneMillion")
-    @Ignore
     var deathsPerOneMillion: Int = 0,
 
     @field:Json(name ="tests")
-    @Ignore
     var tests: Int = 0,
 
     @field:Json(name ="testsPerOneMillion")
-    @Ignore
     var testsPerOneMillion: Int = 0,
 
     @field:Json(name ="continent")
-    @Ignore
     var continent: String = ""
 )
 

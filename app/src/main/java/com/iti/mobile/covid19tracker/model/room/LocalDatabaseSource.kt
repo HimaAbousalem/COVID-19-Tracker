@@ -3,32 +3,25 @@ package com.iti.mobile.covid19tracker.model.room
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.model.room.daos.CountryDao
-import io.reactivex.Observable
-import io.reactivex.Single
+import com.iti.mobile.covid19tracker.model.room.daos.SubscriptionDao
 import javax.inject.Inject
 
 @ApplicationScope
-class LocalDataSource @Inject constructor(localDatabase: LocalDatabase) {
-    private  val countryDao: CountryDao
+class LocalDataSource @Inject constructor(private val countryDao: CountryDao, private val subscriptionDao: SubscriptionDao) {
 
-    init {
-        countryDao = localDatabase.countryDao
-    }
-    fun allCountries(): Observable<List<Country>> {
-        return countryDao.allCountries
+    suspend fun allCountries(): List<Country> {
+        return countryDao.getAllCountries()
     }
 
-    fun insert(country: Country) {
+    suspend fun insert(country: Country) {
         countryDao.insertCountry(country)
     }
 
-    fun delete(countryName : String) {
+    suspend fun delete(countryName : String) {
         countryDao.deleteCountry(countryName)
     }
 
-    fun update(country: Country) {
+    suspend fun update(country: Country) {
         countryDao.updateCountry(country)
     }
-
-
 }

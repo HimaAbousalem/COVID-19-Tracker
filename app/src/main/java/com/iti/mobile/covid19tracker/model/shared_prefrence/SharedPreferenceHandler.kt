@@ -4,34 +4,33 @@ import android.content.SharedPreferences
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.utils.*
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 @ApplicationScope
 class SharedPreferenceHandler @Inject constructor(private val sharedPref: SharedPreferences) {
     private lateinit var editor: SharedPreferences.Editor
-    private lateinit var sharedPreferenceObserver:BehaviorSubject<SharedPreferences>
-
-    val prefChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
-            sharedPreferenceObserver.onNext(sharedPreferences)
-        }
-
-    init {
-        sharedPreferenceObserver = BehaviorSubject.createDefault(sharedPref)
-        sharedPref.registerOnSharedPreferenceChangeListener(prefChangeListener)
-    }
-
-    fun observingSharedPreferenceDataChange():Observable<AllResults>{
-        return sharedPreferenceObserver
-            .map { shared -> AllResults(shared.getLong(UPDATED, 0)
-            ,shared.getInt(ALL_CASES,0),shared.getInt(TODAY_CASES, 0)
-            ,shared.getInt(ALL_DEATHS,0), shared.getInt(TODAY_DEATHS,0)
-            , shared.getInt(ALL_RECOVERED,0)) }
-    }
+//    private lateinit var sharedPreferenceObserver:BehaviorSubject<SharedPreferences>
+//
+//    val prefChangeListener =
+//        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, _ ->
+//            sharedPreferenceObserver.onNext(sharedPreferences)
+//        }
+//
+//    init {
+//        sharedPreferenceObserver = BehaviorSubject.createDefault(sharedPref)
+//        sharedPref.registerOnSharedPreferenceChangeListener(prefChangeListener)
+//    }
+//
+//    fun observingSharedPreferenceDataChange():Observable<AllResults>{
+//        return sharedPreferenceObserver
+//            .throttleLast(3, TimeUnit.SECONDS)
+//            .map { shared -> AllResults(shared.getLong(UPDATED, 0)
+//            ,shared.getInt(ALL_CASES,0),shared.getInt(TODAY_CASES, 0)
+//            ,shared.getInt(ALL_DEATHS,0), shared.getInt(TODAY_DEATHS,0)
+//            , shared.getInt(ALL_RECOVERED,0)) }
+//    }
 
     fun saveAllCountriesResult(allResults: AllResults) {
         editor = sharedPref.edit()
@@ -44,11 +43,11 @@ class SharedPreferenceHandler @Inject constructor(private val sharedPref: Shared
         editor.apply()
     }
 
-    val allCountriesResults : Single<AllResults>
-        get() = Single.just( AllResults(sharedPref.getLong(UPDATED, 0)
+    val allCountriesResults
+        get() = AllResults(sharedPref.getLong(UPDATED, 0)
              ,sharedPref.getInt(ALL_CASES,0),sharedPref.getInt(TODAY_CASES, 0)
              ,sharedPref.getInt(ALL_DEATHS,0), sharedPref.getInt(TODAY_DEATHS,0)
-             , sharedPref.getInt(ALL_RECOVERED,0)))
+             , sharedPref.getInt(ALL_RECOVERED,0))
 
 
     fun clearPref() {
