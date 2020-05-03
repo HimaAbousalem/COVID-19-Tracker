@@ -1,22 +1,19 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
-import android.media.Image
+import android.content.Context
+import android.util.DisplayMetrics
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.model.entities.Country
-import com.iti.mobile.covid19tracker.utils.SUBSCRIBED
-import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
+
 
 class CountriesAdapter(countries: List<Country>) :
     RecyclerView.Adapter<CountriesAdapter.CountriesHolder>() {
@@ -48,6 +45,7 @@ class CountriesAdapter(countries: List<Country>) :
             parent,
             false
         ) as View
+
         return CountriesHolder(v)
     }
 
@@ -58,13 +56,13 @@ class CountriesAdapter(countries: List<Country>) :
         holder.deaths.text = countries[position].deaths.toString()
         holder.recovered.text = countries[position].recovered.toString()
         holder.subscribe.setOnClickListener{
-          if (countries[position].subscription == SUBSCRIBED){
-           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_miscellaneous)
-              countries[position].subscription = UN_SUBSCRIBED
-          }  else {
-           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_globe)
-              countries[position].subscription = SUBSCRIBED
-          }
+//          if (countries[position].subscription == SUBSCRIBED){
+//           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_miscellaneous)
+//              countries[position].subscription = UN_SUBSCRIBED
+//          }  else {
+//           //   holder.subscribe.background  = Resources.getSystem().getDrawable(R.drawable.ic_globe)
+//              countries[position].subscription = SUBSCRIBED
+//          }
 
         }
     }
@@ -73,5 +71,10 @@ class CountriesAdapter(countries: List<Country>) :
     }
     override fun getItemCount(): Int {
         return countries.size
+    }
+    private fun getScreenHeight(context: Context){
+        val dimension = DisplayMetrics()
+         context.getSystemService(Context.WINDOW_SERVICE)
+        val height = dimension.heightPixels
     }
 }

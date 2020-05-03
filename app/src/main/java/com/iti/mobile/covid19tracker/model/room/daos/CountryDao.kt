@@ -10,7 +10,7 @@ interface CountryDao {
     @Query("SELECT * FROM countries")
     fun getAllCountries(): LiveData<List<Country>>
 
-    @Query("SELECT * FROM countries where subscription = 1")
+    @Query("SELECT * FROM countries where subscribtion = 1")
     suspend fun getSubscribedCountries():List<Country>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -82,9 +82,6 @@ dependencies {
     //coil
     implementation "io.coil-kt:coil:0.10.1"
 
-    //rxbinding
-    implementation "com.jakewharton.rxbinding2:rxbinding:$rx_binding"
-
     //Tests
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

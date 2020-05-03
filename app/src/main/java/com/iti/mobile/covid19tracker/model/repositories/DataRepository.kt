@@ -22,7 +22,7 @@ class DataRepository @Inject constructor(
         //update ApiData
         subscribedData.forEach { subscribed->
             apiData.filter { api-> api.country == subscribed.country }
-                .forEach { api-> api.subscription = SUBSCRIBED }
+                .forEach { api-> api.subscribtion = SUBSCRIBED }
         }
         localDataSource.insert(apiData)
         //getAllResults
