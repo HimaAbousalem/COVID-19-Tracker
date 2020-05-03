@@ -6,9 +6,12 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
@@ -17,11 +20,6 @@ import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,8 +52,26 @@ class AllCountriesFragment : Fragment() {
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
+        setupToolbar()
+        fetchData()
 
-        //TODO we need to check if this is the firstTime or not!
+        return binding.root
+    }
+
+    private fun setupToolbar(){
+        setHasOptionsMenu(true);
+        val toolbar = binding.appToolBar.appToolBar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = "All Affected Countries"
+    }
+   private fun setupRecycleView (){
+        layoutManager = LinearLayoutManager(activity)
+        binding.allCountriesRecyclerview.setHasFixedSize(true)
+        binding.allCountriesRecyclerview.layoutManager = layoutManager
+    }
+
+    private fun fetchData (){
+        //TODO we need to check if this is the firstTime or not + check the internet!
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateDatabase()
         }
@@ -69,14 +85,6 @@ class AllCountriesFragment : Fragment() {
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
             Timber.d(it.toString())
         })
-
-        return binding.root
-    }
-
-   private fun setupRecycleView (){
-        layoutManager = LinearLayoutManager(activity)
-        binding.allCountriesRecyclerview.setHasFixedSize(true)
-        binding.allCountriesRecyclerview.layoutManager = layoutManager
     }
 
     fun displayCountries(countriesList: List<Country>) {
@@ -88,8 +96,52 @@ class AllCountriesFragment : Fragment() {
         }
     }
 
-    fun refereshData (){
-        displayCountries(displayList)
+    fun fromView(searchView: SearchView): MutableLiveData< String> {
+        var liveData = MutableLiveData<String>()
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                       val text = newText.orEmpty()
+                            .map { text -> text.toLowerCase() }
+                            .distinct()
+                           .toString()
+                          liveData.value = text
+
+                        return false
+                    }
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        liveData.value = query
+                        return false
+                    }
+                })
+
+        return liveData
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settingsMenuItem) {
+            //TODO:- open setting view
+            return true
+        }
+        if (item.itemId == R.id.app_bar_search){
+            val searchView = item.actionView as SearchView
+            Log.d("search","before "+ countriesList.toString())
+            fromView(searchView).observe(this, Observer { word ->
+                displayList.clear()
+                Log.d("search", countriesList.toString())
+                countriesList.forEach {
+                  if(it.country.contains(word)){
+                      displayList.add(it)
+                  }
+                }
+                displayCountries(displayList)
+              Log.d("search", word.toString())
+        })
+     }
+        return super.onOptionsItemSelected(item)
     }
 
 
