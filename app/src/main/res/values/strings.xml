@@ -14,4 +14,7 @@
     <string name="recoverd">Recoverd</string>
     <string name="deaths">Deaths</string>
     <string name="world_wide">World wide</string>
+    <string name="today_cases">Today Cases</string>
+    <string name="today_deaths">Today Deaths</string>
+    <string name="critical">Critical</string>
 </resources>
