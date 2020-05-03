@@ -8,7 +8,7 @@ import com.squareup.moshi.Json
 @Entity(tableName = "countries" , indices = [Index(value = ["country"])])
 data class Country (
 
-    var subscribtion : Int = UN_SUBSCRIBED,
+    var subscription : Int = UN_SUBSCRIBED,
 
     @field:Json (name = "updated")
     var updated : Long = 0,

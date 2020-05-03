@@ -1,6 +1,7 @@
 package com.iti.mobile.covid19tracker.dagger.scopes
 
 import androidx.lifecycle.ViewModel
+import androidx.work.CoroutineWorker
 import dagger.MapKey
 import javax.inject.Scope
 import kotlin.reflect.KClass
@@ -19,3 +20,7 @@ annotation class ApplicationScope
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey
 internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
+
+@Retention(AnnotationRetention.RUNTIME)
+@MapKey
+annotation class WorkerKey(val value: KClass<out CoroutineWorker>)
