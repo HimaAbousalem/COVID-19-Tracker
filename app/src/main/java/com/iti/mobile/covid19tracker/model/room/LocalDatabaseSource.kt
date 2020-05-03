@@ -28,4 +28,8 @@ class LocalDataSource @Inject constructor(private val countryDao: CountryDao) {
     suspend fun update(country: Country) {
         countryDao.updateCountry(country)
     }
+
+    suspend fun subscribeToCountry(name: String) {
+        countryDao.subscribeToCountry(name)
+    }
 }

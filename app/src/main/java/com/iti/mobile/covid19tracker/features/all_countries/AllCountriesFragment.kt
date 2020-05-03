@@ -1,30 +1,24 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
-import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.iti.mobile.covid19tracker.model.sync.SyncWork
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AllCountriesFragment : Fragment() {
@@ -49,6 +43,9 @@ class AllCountriesFragment : Fragment() {
             activity as AppCompatActivity
         )).inject(this)
         viewModel = ViewModelProvider(this,viewmodelFactory).get(AllCountriesViewModel::class.java)
+        WorkManager.getInstance(requireActivity()).enqueue(
+            OneTimeWorkRequestBuilder<SyncWork>().build()
+        )
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
@@ -72,11 +69,12 @@ class AllCountriesFragment : Fragment() {
 
     private fun fetchData (){
         //TODO we need to check if this is the firstTime or not + check the internet!
-        CoroutineScope(Dispatchers.IO).launch {
-            viewModel.updateDatabase()
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            viewModel.updateDatabase()
+//        }
 
         viewModel.countriesData.observe(requireActivity(), Observer {data ->
+            Timber.d(Thread.currentThread().name)
             countriesList = data
             displayList = data as MutableList<Country>
             displayCountries(countriesList)
@@ -96,7 +94,7 @@ class AllCountriesFragment : Fragment() {
         }
     }
 
-    fun fromView(searchView: SearchView): MutableLiveData< String> {
+   private fun fromView(searchView: SearchView): MutableLiveData< String> {
         var liveData = MutableLiveData<String>()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextChange(newText: String?): Boolean {
@@ -115,34 +113,34 @@ class AllCountriesFragment : Fragment() {
                 })
 
         return liveData
-    }
+   }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+   }
+   override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
             //TODO:- open setting view
             return true
         }
         if (item.itemId == R.id.app_bar_search){
             val searchView = item.actionView as SearchView
-            Log.d("search","before "+ countriesList.toString())
+            Timber.d("before $countriesList")
             fromView(searchView).observe(this, Observer { word ->
                 displayList.clear()
-                Log.d("search", countriesList.toString())
+                Timber.d(countriesList.toString())
                 countriesList.forEach {
-                  if(it.country.contains(word)){
-                      displayList.add(it)
-                  }
+                    if (it.country.contains(word)) {
+                        displayList.add(it)
+                    }
                 }
                 displayCountries(displayList)
-              Log.d("search", word.toString())
-        })
+                Timber.d(word.toString())
+            })
      }
         return super.onOptionsItemSelected(item)
-    }
+   }
 
 
 }

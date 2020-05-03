@@ -2,32 +2,36 @@ package com.iti.mobile.covid19tracker.model.sync
 
 import android.content.Context
 import androidx.work.CoroutineWorker
+import androidx.work.ListenableWorker
 import androidx.work.WorkerParameters
 import com.iti.mobile.covid19tracker.model.repositories.DataRepository
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class SyncWork @AssistedInject constructor(@Assisted private val repo: DataRepository, @Assisted private val appContext: Context, @Assisted private val workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
+class SyncWork @Inject constructor(
+     private val repo: DataRepository,
+     appContext: Context,
+     workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
 
-    override suspend fun doWork(): Result {
-
-        //getDataFromApi
-        //then getDataFromRoom
-        //then compare Subscription Data From Api and room db
-        // then send Notification to the user.
-        return Result.success()
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        var job = repo.updateDataBase()
+        //notification 3lshan el context.
+        Result.success()
     }
 
-    class WorkerFactory @Inject constructor(private val repository: DataRepository):ChildWorkerFactory {
+
+    class Factory @Inject constructor(
+        private val myRepository: DataRepository
+    ): ChildWorkerFactory {
+
         override fun create(appContext: Context, params: WorkerParameters): CoroutineWorker {
-            return SyncWork(repository, appContext, params)
+            return SyncWork(myRepository, appContext, params)
         }
     }
 }
-
 interface ChildWorkerFactory {
-    fun create(appContext: Context, params: WorkerParameters): CoroutineWorker
+    fun create(appContext: Context, params: WorkerParameters): ListenableWorker
 }
 

@@ -9,6 +9,7 @@ import com.iti.mobile.covid19tracker.model.sync.ChildWorkerFactory
 import javax.inject.Inject
 import javax.inject.Provider
 
+
 class WorkerProviderFactory @Inject constructor(
     private val workerFactories: Map<Class<out CoroutineWorker>, @JvmSuppressWildcards Provider<ChildWorkerFactory>>
 ) : WorkerFactory() {
@@ -18,7 +19,10 @@ class WorkerProviderFactory @Inject constructor(
         workerClassName: String,
         workerParameters: WorkerParameters
     ): ListenableWorker? {
-        val workerFactoryProvider = workerFactories.get(workerClassName)
-            return workerFactoryProvider?.get()?.create(appContext, workerParameters)
+        val foundEntry =
+            workerFactories.entries.find { Class.forName(workerClassName).isAssignableFrom(it.key) }
+        val factoryProvider = foundEntry?.value
+            ?: throw IllegalArgumentException("unknown worker class name: $workerClassName")
+        return factoryProvider.get().create(appContext, workerParameters)
     }
 }
