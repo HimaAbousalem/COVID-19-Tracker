@@ -1,7 +1,10 @@
 package com.iti.mobile.covid19tracker.model.entities
 
 import androidx.annotation.NonNull
-import androidx.room.*
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
 import com.squareup.moshi.Json
 
@@ -57,5 +60,13 @@ data class Country (
 
     @field:Json(name ="continent")
     var continent: String = ""
-)
+){
+    override fun equals(other: Any?): Boolean {
+        val countryObj = other as Country
+        return country == countryObj.country && cases == countryObj.cases && updated == countryObj.updated &&
+                subscription == countryObj.subscription && deaths == countryObj.deaths && recovered == countryObj.recovered &&
+                todayCases == countryObj.todayCases && todayDeaths == countryObj.todayDeaths && todayCases == countryObj.todayDeaths &&
+                critical == countryObj.critical
+    }
+}
 

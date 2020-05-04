@@ -13,6 +13,9 @@ interface CountryDao {
     @Query("SELECT * FROM countries where subscription = 1")
     suspend fun getSubscribedCountries():List<Country>
 
+    @Query("SELECT * FROM countries where subscription = 1")
+    fun getSubscribedCountriesLiveData():LiveData<List<Country>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCountry(country: List<Country>)
 

@@ -16,8 +16,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="5">
 
+        android:weightSum="5">
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/hide_details_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_highlight_off_black_24dp"
+            app:iconGravity="start"
+            android:layout_marginTop="@dimen/all_margin"
+            android:layout_marginLeft="@dimen/all_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/country_info_layout"
             android:layout_width="match_parent"
@@ -54,9 +64,17 @@
                 android:layout_height="30dp"
                 android:background="@drawable/ic_miscellaneous"
                 app:iconGravity="start"
+                android:layout_marginRight="@dimen/all_margin"
+                app:layout_constraintEnd_toStartOf="@id/info_button"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/info_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_info_outline_black_24dp"
+                app:iconGravity="start"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -140,7 +158,12 @@
                     android:textSize="@dimen/numbers_size"/>
             </LinearLayout>
         </LinearLayout>
-
+        <include
+            android:id="@+id/details_layout"
+            layout="@layout/details_country_card_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+              />
 
     </LinearLayout>
 

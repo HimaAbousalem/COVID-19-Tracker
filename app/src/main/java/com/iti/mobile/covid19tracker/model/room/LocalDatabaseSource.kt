@@ -7,9 +7,9 @@ import com.iti.mobile.covid19tracker.model.room.daos.CountryDao
 import javax.inject.Inject
 
 @ApplicationScope
-class LocalDataSource @Inject constructor(private val countryDao: CountryDao) {
+class LocalDatabaseSource @Inject constructor(private val countryDao: CountryDao) {
 
-    fun allCountries(): LiveData<List<Country>> {
+    fun getAllCountries(): LiveData<List<Country>> {
         return countryDao.getAllCountries()
     }
 
@@ -31,5 +31,9 @@ class LocalDataSource @Inject constructor(private val countryDao: CountryDao) {
 
     suspend fun subscribeToCountry(name: String) {
         countryDao.subscribeToCountry(name)
+    }
+
+    fun getAllSubscriptions(): LiveData<List<Country>> {
+        return countryDao.getSubscribedCountriesLiveData()
     }
 }

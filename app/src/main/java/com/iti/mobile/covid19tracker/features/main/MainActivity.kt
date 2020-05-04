@@ -21,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupBottomNavigation()
         (application as Covid19App).appComponent.controllerComponent(ControllerModule(this)).inject(this)
+        binding.bottomNavigation.setOnNavigationItemReselectedListener {
+            //do Noting.
+        }
     }
 
     private fun setupBottomNavigation (){

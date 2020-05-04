@@ -1,6 +1,7 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.os.Bundle
+
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -11,11 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.recyclerview.widget.MergeAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
+import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.model.sync.SyncWork
 import timber.log.Timber
@@ -24,107 +28,124 @@ import javax.inject.Inject
 class AllCountriesFragment : Fragment() {
     @Inject
     lateinit var viewmodelFactory: ViewModelProvidersFactory
-    @Inject
     lateinit var viewModel: AllCountriesViewModel
-    private lateinit var binding : FragmentAllCountriesBinding
+    private lateinit var binding: FragmentAllCountriesBinding
     lateinit var countriesAdapter: CountriesAdapter
-    private lateinit var allResultsAdapter: CountriesAdapter
+    private lateinit var allResultsAdapter: AllResultsAdapter
     private lateinit var layoutManager: LinearLayoutManager
-     lateinit var displayList: MutableList<Country>
-     lateinit var countriesList: List<Country>
-
-
+    lateinit var displayList: MutableList<Country>
+    lateinit var countriesList: List<Country>
+    lateinit var allResults: AllResults
+    lateinit var mergeAdapter: MergeAdapter
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAllCountriesBinding.inflate(layoutInflater)
-        (activity?.application as Covid19App).appComponent.controllerComponent(ControllerModule(
-            activity as AppCompatActivity
-        )).inject(this)
-        viewModel = ViewModelProvider(this,viewmodelFactory).get(AllCountriesViewModel::class.java)
+        (activity?.application as Covid19App).appComponent.controllerComponent(
+            ControllerModule(
+                activity as AppCompatActivity
+            )
+        ).inject(this)
+        viewModel = ViewModelProvider(this, viewmodelFactory).get(AllCountriesViewModel::class.java)
         WorkManager.getInstance(requireActivity()).enqueue(
             OneTimeWorkRequestBuilder<SyncWork>().build()
         )
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
-        setupToolbar()
         fetchData()
-
+        setupToolbar()
         return binding.root
     }
 
-    private fun setupToolbar(){
-        setHasOptionsMenu(true);
+    private fun setupToolbar() {
+        setHasOptionsMenu(true)
         val toolbar = binding.appToolBar.appToolBar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "All Affected Countries"
     }
-   private fun setupRecycleView (){
+
+    private fun setupRecycleView() {
+        displayList = mutableListOf()
+        countriesList = listOf()
+        allResults = AllResults()
         layoutManager = LinearLayoutManager(activity)
         binding.allCountriesRecyclerview.setHasFixedSize(true)
         binding.allCountriesRecyclerview.layoutManager = layoutManager
+        countriesAdapter = CountriesAdapter(countriesList)
+        allResultsAdapter = AllResultsAdapter(allResults)
+        allResultsAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        mergeAdapter = MergeAdapter(allResultsAdapter, countriesAdapter)
+        binding.allCountriesRecyclerview.adapter = mergeAdapter
     }
 
-    private fun fetchData (){
+    private fun fetchData() {
         //TODO we need to check if this is the firstTime or not + check the internet!
 //        CoroutineScope(Dispatchers.IO).launch {
 //            viewModel.updateDatabase()
 //        }
 
-        viewModel.countriesData.observe(requireActivity(), Observer {data ->
+        viewModel.countriesData.observe(requireActivity(), Observer { data ->
             Timber.d(Thread.currentThread().name)
             countriesList = data
-            displayList = data as MutableList<Country>
+            displayList.addAll(data)
             displayCountries(countriesList)
+
+        })
+        viewModel.allCountriesResult.observe(requireActivity(), Observer {
+            Timber.d("Observer : $it")
+            allResults = it
+            allResultsAdapter.allResults = it
+            mergeAdapter.adapters.first().notifyDataSetChanged()
         })
 
-        viewModel.allCountriesResult.observe(requireActivity(), Observer {
-            Timber.d(it.toString())
-        })
     }
 
     fun displayCountries(countriesList: List<Country>) {
-        countriesAdapter = CountriesAdapter(countriesList)
-        binding.allCountriesRecyclerview.adapter = countriesAdapter
-        countriesAdapter.notifyDataSetChanged()
+        countriesAdapter.countries = countriesList.toMutableList()
+        mergeAdapter.adapters.last().notifyDataSetChanged()
         if (countriesAdapter.itemCount > 0) {
-           // activity.visibility = View.INVISIBLE
+            // activity.visibility = View.INVISIBLE
         }
     }
 
-   private fun fromView(searchView: SearchView): MutableLiveData< String> {
+    //Search on countries
+    private fun fromView(searchView: SearchView): MutableLiveData<String> {
         var liveData = MutableLiveData<String>()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                       val text = newText.orEmpty()
-                            .map { text -> text.toLowerCase() }
-                            .distinct()
-                           .toString()
-                          liveData.value = text
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val text = newText
+                    .toString()
+                if (text.matches(Regex("[a-z A-Z]*"))) {
+                    liveData.value = text.trim()
+                }
+                return false
+            }
 
-                        return false
-                    }
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        liveData.value = query
-                        return false
-                    }
-                })
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                liveData.value = query
+                return false
+            }
+        })
 
         return liveData
-   }
+    }
 
-   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
-   }
-   override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
             //TODO:- open setting view
             return true
         }
-        if (item.itemId == R.id.app_bar_search){
+        if (item.itemId == R.id.app_bar_search) {
             val searchView = item.actionView as SearchView
             Timber.d("before $countriesList")
             fromView(searchView).observe(this, Observer { word ->
@@ -138,9 +159,22 @@ class AllCountriesFragment : Fragment() {
                 displayCountries(displayList)
                 Timber.d(word.toString())
             })
-     }
+            fromView(searchView).observe(this, Observer { word ->
+                if (word.isNotEmpty()) {
+                    displayList.clear()
+                    countriesList.forEach {
+                        if (it.country.contains(word, ignoreCase = true)) {
+                            displayList.add(it)
+                        }
+                    }
+                    displayCountries(displayList)
+                } else {
+                    displayCountries(countriesList)
+                }
+            })
+        }
         return super.onOptionsItemSelected(item)
-   }
+    }
 
 
 }

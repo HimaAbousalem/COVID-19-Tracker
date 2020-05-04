@@ -17,6 +17,7 @@ const val ALL_RECOVERED= "all_recovered"
 const val TODAY_CASES = "today_cases"
 const val TODAY_DEATHS = "today_deaths"
 const val UPDATED = "updated"
+const val CRITICAL = "critical"
 
 //WorkManager
 const val WORK_MANAGER_KEY = "SyncWork"
@@ -24,5 +25,6 @@ const val WORK_MANAGER_KEY = "SyncWork"
 //Notification
 const val CHANNEL_NAME = "covid19"
 const val CHANNEL_ID = "10000"
+const val NOTIFICATION_ID = 5
 
 

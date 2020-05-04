@@ -1,15 +1,15 @@
 package com.iti.mobile.covid19tracker.utils
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.model.entities.Country
 
-fun makeStatusNotification(context: Context, changes: List<Country>): Notification {
+fun makeStatusNotification(context: Context, changes: List<Country>) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_HIGH;
@@ -25,6 +25,6 @@ fun makeStatusNotification(context: Context, changes: List<Country>): Notificati
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
 
-       // NotificationManagerCompat.from(context).notify(notificationId, builder.build());
-        return builder.build();
+       NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
+       // return builder.build()
     }

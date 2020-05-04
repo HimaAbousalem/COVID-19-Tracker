@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.iti.mobile.covid19tracker.dagger.scopes.ApplicationScope
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.utils.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -30,17 +29,21 @@ class SharedPreferenceHandler @Inject constructor(private val sharedPref: Shared
         editor.putInt(ALL_RECOVERED, allResults.recovered)
         editor.putInt(TODAY_CASES, allResults.todayCases)
         editor.putInt(TODAY_DEATHS, allResults.todayDeaths)
+        editor.putInt(CRITICAL, allResults.critical)
         editor.putLong(UPDATED, allResults.updated)
         editor.apply()
     }
 
-    fun getAllCountriesResultLiveData() = liveData
+    fun getAllCountriesResultLiveData(): LiveData<AllResults>{
+        if( liveData.value == null) liveData.postValue(getAllCountriesResults(sharedPref))
+        return liveData
+    }
 
     private fun getAllCountriesResults(sharedPref: SharedPreferences): AllResults {
-        return AllResults(sharedPref.getLong(UPDATED, 0)
-            ,sharedPref.getInt(ALL_CASES,0),sharedPref.getInt(TODAY_CASES, 0)
-            ,sharedPref.getInt(ALL_DEATHS,0), sharedPref.getInt(TODAY_DEATHS,0)
-            , sharedPref.getInt(ALL_RECOVERED,0))
+        return AllResults(updated = sharedPref.getLong(UPDATED, 0)
+            ,cases = sharedPref.getInt(ALL_CASES,0), todayCases = sharedPref.getInt(TODAY_CASES, 0)
+            ,deaths = sharedPref.getInt(ALL_DEATHS,0), todayDeaths = sharedPref.getInt(TODAY_DEATHS,0)
+            , critical = sharedPref.getInt(CRITICAL, 0), recovered = sharedPref.getInt(ALL_RECOVERED,0))
     }
 
     fun clearPref() {
