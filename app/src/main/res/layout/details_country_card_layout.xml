@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     >
     <LinearLayout
         android:id="@+id/details_layout"
@@ -14,7 +14,7 @@
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="3"
-       android:visibility="gone" >
+       android:visibility="visible" >
 
     <LinearLayout
 
@@ -95,4 +95,10 @@
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
+    <include
+        android:id="@+id/graph_layout"
+        layout="@layout/statistics_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </merge>

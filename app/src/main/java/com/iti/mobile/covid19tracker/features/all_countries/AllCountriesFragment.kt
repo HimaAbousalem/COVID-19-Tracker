@@ -10,8 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
@@ -21,7 +19,6 @@ import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
-import com.iti.mobile.covid19tracker.model.sync.SyncWork
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -49,9 +46,9 @@ class AllCountriesFragment : Fragment() {
             )
         ).inject(this)
         viewModel = ViewModelProvider(this, viewmodelFactory).get(AllCountriesViewModel::class.java)
-        WorkManager.getInstance(requireActivity()).enqueue(
-            OneTimeWorkRequestBuilder<SyncWork>().build()
-        )
+//        WorkManager.getInstance(requireActivity()).enqueue(
+//            OneTimeWorkRequestBuilder<SyncWork>().build()
+//        )
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()

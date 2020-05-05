@@ -12,160 +12,175 @@
     android:foreground="?android:attr/selectableItemBackground">
 
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-
-        android:weightSum="5">
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/hide_details_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/ic_highlight_off_black_24dp"
-            app:iconGravity="start"
-            android:layout_marginTop="@dimen/all_margin"
-            android:layout_marginLeft="@dimen/all_margin"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone" />
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/country_info_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:layout_marginTop="@dimen/all_margin"
-            android:layout_marginRight="@dimen/all_margin"
-            android:layout_marginLeft="@dimen/all_margin"
-           >
-
-            <ImageView
-                android:id="@+id/flag_imageview"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="@dimen/all_margin"
-                android:src="@drawable/ic_globe"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/country_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/world_wide"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toRightOf="@+id/flag_imageview"
-                app:layout_constraintTop_toTopOf="@+id/flag_imageview" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/subscribe_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ic_miscellaneous"
-                app:iconGravity="start"
-                android:layout_marginRight="@dimen/all_margin"
-                app:layout_constraintEnd_toStartOf="@id/info_button"
-                app:layout_constraintTop_toTopOf="parent" />
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/info_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ic_info_outline_black_24dp"
-                app:iconGravity="start"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:layout_margin="@dimen/all_margin"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:baselineAligned="false">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            android:weightSum="5">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/hide_details_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="@dimen/all_margin"
+                android:layout_marginTop="@dimen/all_margin"
+                android:background="@drawable/ic_highlight_off_black_24dp"
+                android:visibility="gone"
+                app:iconGravity="start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/country_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="@dimen/all_margin"
+                android:layout_marginTop="@dimen/all_margin"
+                android:layout_marginRight="@dimen/all_margin"
+                android:layout_weight="2">
+
+                <ImageView
+                    android:id="@+id/flag_imageview"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/all_margin"
+                    android:src="@drawable/ic_globe"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/country_textview"
+                    android:layout_width="210dp"
+                    android:layout_height="27dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/world_wide"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/subscribe_button"
+                    app:layout_constraintLeft_toRightOf="@+id/flag_imageview"
+                    app:layout_constraintTop_toTopOf="@+id/flag_imageview" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/subscribe_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="@dimen/all_margin"
+                    android:background="@drawable/ic_miscellaneous"
+                    app:iconGravity="start"
+                    app:layout_constraintEnd_toStartOf="@id/info_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/info_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_info_outline_black_24dp"
+                    app:iconGravity="start"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/confirmed"/>
-                <TextView
-                    android:id="@+id/confirmed_cases"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/confirmed"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/numbers_size"/>
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/all_margin"
+                android:layout_weight="3"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/confirmed" />
+
+                    <TextView
+                        android:id="@+id/confirmed_cases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/confirmed"
+                        android:textSize="@dimen/numbers_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="2dp"
+                    android:layout_height="50dp"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recoverd" />
+
+                    <TextView
+                        android:id="@+id/recovered_cases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/confirmed"
+                        android:textSize="@dimen/numbers_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="2dp"
+                    android:layout_height="50dp"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deaths" />
+
+                    <TextView
+                        android:id="@+id/deaths_cases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/confirmed"
+                        android:textSize="@dimen/numbers_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:background="?android:attr/listDivider" />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recoverd"/>
-                <TextView
-                    android:id="@+id/recovered_cases"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/confirmed"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/numbers_size"/>
-            </LinearLayout>
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:background="?android:attr/listDivider" />
-            <LinearLayout
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <include
+                android:id="@+id/details_layout"
+                layout="@layout/details_country_card_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/deaths"/>
-                <TextView
-                    android:id="@+id/deaths_cases"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/confirmed"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/numbers_size"/>
-            </LinearLayout>
         </LinearLayout>
-        <include
-            android:id="@+id/details_layout"
-            layout="@layout/details_country_card_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-              />
-
-    </LinearLayout>
+    </ScrollView>
 
 
 </androidx.cardview.widget.CardView>

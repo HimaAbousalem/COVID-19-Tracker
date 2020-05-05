@@ -1,4 +1,4 @@
-package com.iti.mobile.covid19tracker.model.sync
+package com.iti.mobile.covid19tracker.work_manager
 
 import android.content.Context
 import androidx.work.CoroutineWorker
@@ -33,7 +33,11 @@ class SyncWork @Inject constructor(
     ): ChildWorkerFactory {
 
         override fun create(appContext: Context, params: WorkerParameters): CoroutineWorker {
-            return SyncWork(myRepository, appContext, params)
+            return SyncWork(
+                myRepository,
+                appContext,
+                params
+            )
         }
     }
 }
