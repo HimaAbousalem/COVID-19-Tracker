@@ -11,11 +11,12 @@ import coil.api.load
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.SUBSCRIBED
 import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
 import kotlinx.android.synthetic.main.country_card_view.view.*
 
-class SubscriptionsAdapter: ListAdapter<Country, SubscriptionsAdapter.CountriesViewHolder>(CountriesDiffCallback()) {
+class SubscriptionsAdapter(val listener: Clickable): ListAdapter<Country, SubscriptionsAdapter.CountriesViewHolder>(CountriesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         CountriesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.country_card_view, parent, false))
@@ -63,9 +64,11 @@ class SubscriptionsAdapter: ListAdapter<Country, SubscriptionsAdapter.CountriesV
                 if (countryData.subscription == SUBSCRIBED){
                     itemView.subscribe_button.setImageResource(R.drawable.ic_miscellaneous)
                     countryData.subscription = UN_SUBSCRIBED
+                    listener.onItemClick(countryData)
                 }  else {
                     itemView.subscribe_button.setImageResource(R.drawable.ic_notifications_black_24dp)
                     countryData.subscription = SUBSCRIBED
+                    listener.onItemClick(countryData)
                 }
             }
         }

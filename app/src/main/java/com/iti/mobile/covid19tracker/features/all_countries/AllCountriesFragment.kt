@@ -1,7 +1,6 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.os.Bundle
-
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -10,8 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
@@ -21,11 +18,14 @@ import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
-import com.iti.mobile.covid19tracker.model.sync.SyncWork
+import com.iti.mobile.covid19tracker.utils.Clickable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class AllCountriesFragment : Fragment() {
+class AllCountriesFragment : Fragment(), Clickable {
     @Inject
     lateinit var viewmodelFactory: ViewModelProvidersFactory
     lateinit var viewModel: AllCountriesViewModel
@@ -49,9 +49,9 @@ class AllCountriesFragment : Fragment() {
             )
         ).inject(this)
         viewModel = ViewModelProvider(this, viewmodelFactory).get(AllCountriesViewModel::class.java)
-        WorkManager.getInstance(requireActivity()).enqueue(
-            OneTimeWorkRequestBuilder<SyncWork>().build()
-        )
+//        WorkManager.getInstance(requireActivity()).enqueue(
+//            OneTimeWorkRequestBuilder<SyncWork>().build()
+//        )
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
@@ -74,7 +74,7 @@ class AllCountriesFragment : Fragment() {
         layoutManager = LinearLayoutManager(activity)
         binding.allCountriesRecyclerview.setHasFixedSize(true)
         binding.allCountriesRecyclerview.layoutManager = layoutManager
-        countriesAdapter = CountriesAdapter(countriesList)
+        countriesAdapter = CountriesAdapter(countriesList, this)
         allResultsAdapter = AllResultsAdapter(allResults)
         allResultsAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -174,6 +174,12 @@ class AllCountriesFragment : Fragment() {
             })
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onItemClick(country: Country) {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.updateCountry(country)
+        }
     }
 
 
