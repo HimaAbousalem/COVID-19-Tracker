@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
+    android:layout_margin="@dimen/all_margin"
+    android:layout_gravity="center"
+    android:layout_height="300dp">
+   <FrameLayout android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/graph_layout"
+       >
+       <com.github.mikephil.charting.charts.LineChart
+           android:id="@+id/chart"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           />
+       <include  layout="@layout/no_data_layout"
+           android:id="@+id/noData_Layout"
+           />
+   </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>

@@ -20,17 +20,19 @@ class SyncWork @Inject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         var job = repo.updateDataBase()
         Timber.d("#8 You have the data + $job")
-        if(job!!.isNotEmpty()) {
-            var notificationText = "There is a changes happens in ("
-            for(data in 0..job.size) {
-                notificationText += if(data == 0 )
-                    job[data].country
-                else
-                    ", ${job[data].country}"
+        if (job != null) {
+            if(job.isNotEmpty()) {
+                var notificationText = "There is a changes happens in ("
+                for(data in 0..job.size) {
+                    notificationText += if(data == 0 )
+                        job[data].country
+                    else
+                        ", ${job[data].country}"
+
+                }
+                makeStatusNotification(applicationContext, notificationText)
 
             }
-            makeStatusNotification(applicationContext, notificationText)
-
         }
         Result.success()
     }

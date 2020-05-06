@@ -2,6 +2,7 @@ package com.iti.mobile.covid19tracker.features
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.XAxis
@@ -19,6 +20,9 @@ import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.ActivityGraphTestBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.model.repositories.DataRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,7 +37,7 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
         setContentView(binding.root)
         (application as Covid19App).appComponent.controllerComponent(ControllerModule(this)).inject(this)
         setup()
-       // getData()
+        getData()
         val lineDataSet = LineDataSet(datavalues()," data set 1")
         val lineDataSet2 = LineDataSet(datavalues2()," data set 2")
         lineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
@@ -136,9 +140,11 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
 
     }
     fun getData (){
-        dataRepository.getCountryHistory("Egypt").timeLine
-            ?.cases?.forEach {
-               print(it)
-            }
+         CoroutineScope(Dispatchers.IO).launch {
+             dataRepository.getCountryHistory("Egypt").timeLine
+                 ?.cases?.forEach {
+                     Log.i ("req",it.toString())
+                 }
+         }
     }
 }

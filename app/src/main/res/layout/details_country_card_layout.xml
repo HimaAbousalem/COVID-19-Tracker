@@ -1,104 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_margin"
-        android:layout_weight="3"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="3"
-       android:visibility="visible" >
-
-    <LinearLayout
-
-        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/today_cases" />
+            android:layout_margin="@dimen/all_margin"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:weightSum="3">
 
-        <TextView
-            android:id="@+id/today_cases"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/numbers_size"
-            android:text="0"
-            android:textStyle="bold" />
+            <LinearLayout
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/today_cases"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/today_cases"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="@dimen/numbers_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/today_deaths"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/today_deaths_cases"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="@dimen/numbers_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/critical" />
+
+                <TextView
+                    android:id="@+id/critical_cases"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="@dimen/numbers_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <include
+            android:id="@+id/graph_layout"
+            layout="@layout/statistics_layout"
+ />
     </LinearLayout>
-
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="2dp"
-        android:layout_height="50dp"
-        android:background="?android:attr/listDivider" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/today_deaths" />
-
-        <TextView
-            android:id="@+id/today_deaths_cases"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/numbers_size"
-            android:text="0"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="2dp"
-        android:layout_height="50dp"
-        android:background="?android:attr/listDivider" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/critical" />
-
-        <TextView
-            android:id="@+id/critical_cases"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="@dimen/numbers_size"
-            android:textStyle="bold" />
-    </LinearLayout>
-</LinearLayout>
-    <include
-        android:id="@+id/graph_layout"
-        layout="@layout/statistics_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
 </merge>

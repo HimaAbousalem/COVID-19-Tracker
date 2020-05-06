@@ -60,7 +60,7 @@ class DataRepository @Inject constructor(
         localDatabaseSource.update(country)
     }
 
-    fun getCountryHistory (country:String) : CountryHistory {
-       return covidApi.getCountryHistory()
+    suspend fun getCountryHistory (country:String) : CountryHistory {
+       return covidApi.getCountryHistory(country)
     }
 }

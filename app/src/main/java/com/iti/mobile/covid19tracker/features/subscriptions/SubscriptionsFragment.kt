@@ -42,6 +42,7 @@ class SubscriptionsFragment : Fragment(), Clickable {
         viewModel.subscribedCountriesData.observe(requireActivity(), Observer {subscription->
             if(subscription.isEmpty()){
                 Timber.d("No Subscriptions")
+                adapter?.submitList(subscription)
             }else {
                 adapter?.submitList(subscription)
             }

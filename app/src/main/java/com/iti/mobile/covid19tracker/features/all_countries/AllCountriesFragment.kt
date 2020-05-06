@@ -1,5 +1,6 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -89,14 +90,14 @@ class AllCountriesFragment : Fragment(), Clickable {
 //        }
 
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
-            Timber.d(Thread.currentThread().name)
+           // Timber.d(Thread.currentThread().name)
             countriesList = data
             displayList.addAll(data)
             displayCountries(countriesList)
 
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
-            Timber.d("Observer : $it")
+           // Timber.d("Observer : $it")
             allResults = it
             allResultsAdapter.allResults = it
             mergeAdapter.adapters.first().notifyDataSetChanged()
@@ -108,7 +109,17 @@ class AllCountriesFragment : Fragment(), Clickable {
         countriesAdapter.countries = countriesList.toMutableList()
         mergeAdapter.adapters.last().notifyDataSetChanged()
         if (countriesAdapter.itemCount > 0) {
-            // activity.visibility = View.INVISIBLE
+            binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
+            binding.noDataLayout.noDataTextView.text =
+                Resources.getSystem().getText(R.string.no_internet)
+            binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
+            binding.noDataLayout.retryAgainButton.setOnClickListener {
+                //TODO:- check internet and call worker
+            }
+            binding.allCountriesRecyclerview.visibility = View.GONE
+        }else {
+            binding.allCountriesRecyclerview.visibility = View.VISIBLE
+            binding.noDataLayout.noDataTextView.visibility = View.GONE
         }
     }
 
@@ -147,17 +158,14 @@ class AllCountriesFragment : Fragment(), Clickable {
         }
         if (item.itemId == R.id.app_bar_search) {
             val searchView = item.actionView as SearchView
-            Timber.d("before $countriesList")
             fromView(searchView).observe(this, Observer { word ->
                 displayList.clear()
-                Timber.d(countriesList.toString())
                 countriesList.forEach {
                     if (it.country.contains(word)) {
                         displayList.add(it)
                     }
                 }
                 displayCountries(displayList)
-                Timber.d(word.toString())
             })
             fromView(searchView).observe(this, Observer { word ->
                 if (word.isNotEmpty()) {

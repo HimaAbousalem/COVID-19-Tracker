@@ -40,6 +40,7 @@ class Covid19App : Application(){
             .setBackoffCriteria(BackoffPolicy.LINEAR, 2, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
+       WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
     }
 }

@@ -25,4 +25,8 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@id/app_tool_bar"/>
 
+  <include  layout="@layout/no_data_layout"
+      android:id="@+id/noData_Layout"
+      />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
