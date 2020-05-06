@@ -12,4 +12,7 @@ class SubscriptionsViewModel @Inject constructor(private val repository: DataRep
     val subscribedCountriesData: LiveData<List<Country>> = liveData {
         emitSource(repository.getSubscribedCountries())
     }
+    suspend fun updateCountry(country: Country){
+        repository.updateCountrySubscription(country)
+    }
 }

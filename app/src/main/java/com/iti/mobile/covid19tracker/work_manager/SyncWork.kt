@@ -21,8 +21,16 @@ class SyncWork @Inject constructor(
         var job = repo.updateDataBase()
         Timber.d("#8 You have the data + $job")
         if(job!!.isNotEmpty()) {
-            for(data in 0..job.size)
-                makeStatusNotification(applicationContext, job)
+            var notificationText = "There is a changes happens in ("
+            for(data in 0..job.size) {
+                notificationText += if(data == 0 )
+                    job[data].country
+                else
+                    ", ${job[data].country}"
+
+            }
+            makeStatusNotification(applicationContext, notificationText)
+
         }
         Result.success()
     }

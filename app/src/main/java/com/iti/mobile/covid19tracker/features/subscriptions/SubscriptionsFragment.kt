@@ -13,13 +13,18 @@ import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentSubscriptionsBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
+import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.utils.Clickable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class SubscriptionsFragment : Fragment() {
+class SubscriptionsFragment : Fragment(), Clickable {
 
     lateinit var binding: FragmentSubscriptionsBinding
     @Inject
@@ -46,7 +51,7 @@ class SubscriptionsFragment : Fragment() {
 
     private fun setupRecycleView() {
         binding.subscriptionRecycler.layoutManager = LinearLayoutManager(requireActivity())
-        adapter = SubscriptionsAdapter()
+        adapter = SubscriptionsAdapter(this)
         binding.subscriptionRecycler.adapter = adapter
 
     }
@@ -57,4 +62,9 @@ class SubscriptionsFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = "Subscription"
     }
 
+    override fun onItemClick(country: Country) {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.updateCountry(country)
+        }
+    }
 }

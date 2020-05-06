@@ -11,7 +11,6 @@ import com.iti.mobile.covid19tracker.utils.calculateTheDifferences
 import com.iti.mobile.covid19tracker.utils.updateApiList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 class DataRepository @Inject constructor(
@@ -22,20 +21,20 @@ class DataRepository @Inject constructor(
         var changesList: MutableList<Country>? = null
         //getAllResults
         val allResults = covidApi.getFullResults()
-        Timber.d("#1 ${allResults}")
+        //Timber.d("#1 $allResults")
         val apiData = covidApi.getCountries("cases")
-        Timber.d("#2 ${apiData[0].cases}")
+     //   Timber.d("#2 ${apiData[0].cases}")
 
         sharedPreference.saveAllCountriesResult(allResults)
-        localDatabaseSource.insert(apiData)
-        localDatabaseSource.subscribeToCountry("Egypt")
-        localDatabaseSource.subscribeToCountry("USA")
-        localDatabaseSource.subscribeToCountry("Italy")
+//        localDatabaseSource.insert(apiData)
+//        localDatabaseSource.subscribeToCountry("Egypt")
+//        localDatabaseSource.subscribeToCountry("USA")
+//        localDatabaseSource.subscribeToCountry("Italy")
         val subscribedData = localDatabaseSource.getSubscribedCountries()
 
-        Timber.d("#3 #4 ${subscribedData[0].cases}")
-        subscribedData[0].cases = 10000000
-        subscribedData[1].cases = 5000000
+//        Timber.d("#3 #4 ${subscribedData[0].cases}")
+//        subscribedData[0].cases = 10000000
+//        subscribedData[1].cases = 5000000
 
         //update ApiData
         if(subscribedData.isNotEmpty()) {
@@ -45,7 +44,7 @@ class DataRepository @Inject constructor(
             }
         }
         localDatabaseSource.insert(apiData)
-        Timber.d("#7 save to database")
+    //    Timber.d("#7 save to database")
         return@withContext changesList
     }
 
@@ -56,6 +55,10 @@ class DataRepository @Inject constructor(
     fun getAllResultsSharedPreference() = sharedPreference.getAllCountriesResultLiveData()
 
     fun getSubscribedCountries() = localDatabaseSource.getAllSubscriptions()
+
+    suspend fun updateCountrySubscription(country: Country) {
+        localDatabaseSource.update(country)
+    }
 
     fun getCountryHistory (country:String) : CountryHistory {
        return covidApi.getCountryHistory()

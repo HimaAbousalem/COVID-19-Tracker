@@ -13,11 +13,12 @@ import coil.api.load
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.SUBSCRIBED
 import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
 
 
-class CountriesAdapter(countries: List<Country>) :
+class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
     RecyclerView.Adapter<CountriesAdapter.CountriesHolder>() {
 
     var countries: MutableList<Country> = countries.toMutableList()
@@ -90,9 +91,11 @@ class CountriesAdapter(countries: List<Country>) :
           if (countries[position].subscription == SUBSCRIBED){
               holder.subscribe.setImageResource(R.drawable.ic_miscellaneous)
               countries[position].subscription = UN_SUBSCRIBED
+              listener.onItemClick(countries[position])
           }  else {
               holder.subscribe.setImageResource(R.drawable.ic_notifications_black_24dp)
               countries[position].subscription = SUBSCRIBED
+              listener.onItemClick(countries[position])
           }
         }
     }

@@ -29,7 +29,7 @@ class Covid19App : Application(){
         WorkManager.initialize(this, Configuration.Builder()
                 .setWorkerFactory(myWorkerFactory)
                 .build())
-       scheduleWork()
+        scheduleWork()
     }
 
     private fun scheduleWork() {
@@ -37,6 +37,7 @@ class Covid19App : Application(){
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
         val request = PeriodicWorkRequestBuilder<SyncWork>(15, TimeUnit.MINUTES)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, 2, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
