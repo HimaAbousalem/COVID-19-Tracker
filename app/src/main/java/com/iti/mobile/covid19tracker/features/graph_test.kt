@@ -15,22 +15,29 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.Utils
 import com.iti.mobile.covid19tracker.R
+import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.ActivityGraphTestBinding
+import com.iti.mobile.covid19tracker.features.base.Covid19App
+import com.iti.mobile.covid19tracker.model.repositories.DataRepository
+import javax.inject.Inject
 
 
 lateinit var binding: ActivityGraphTestBinding
 
 class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
+    @Inject
+    lateinit var dataRepository: DataRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGraphTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        (application as Covid19App).appComponent.controllerComponent(ControllerModule(this)).inject(this)
         setup()
+       // getData()
         val lineDataSet = LineDataSet(datavalues()," data set 1")
         val lineDataSet2 = LineDataSet(datavalues2()," data set 2")
         lineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
         lineDataSet.setColor(ContextCompat.getColor(baseContext, R.color.colorPrimary))
-
         lineDataSet2.setDrawFilled(true)
         lineDataSet2.setFillFormatter(FillFormatter { dataSet, dataProvider ->
             return@FillFormatter binding.chart2.axisLeft.axisMinimum
@@ -87,11 +94,6 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
         TODO("Not yet implemented")
     }
     fun setup (){
-
-            // Chart Style
-            // disable description text
-           // binding.chart2.getDescription().setEnabled(false)
-
             // enable touch gestures
             binding.chart2.setTouchEnabled(true)
 
@@ -132,5 +134,11 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
             yAxis.setAxisMaxValue(200f)
             yAxis.setAxisMinValue(-50f)
 
+    }
+    fun getData (){
+        dataRepository.getCountryHistory("Egypt").timeLine
+            ?.cases?.forEach {
+               print(it)
+            }
     }
 }
