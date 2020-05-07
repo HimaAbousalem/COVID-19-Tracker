@@ -15,13 +15,13 @@ class DataRepository @Inject constructor(
     private val localDatabaseSource: LocalDatabaseSource,
     private val covidApi: CovidApi, private  val sharedPreference: SharedPreferenceHandler) {
 
-    suspend fun updateDataBase(): List<Country>? = withContext(Dispatchers.IO){
-        var changesList: MutableList<Country>? = null
+    suspend fun updateDataBase(): List<String>? = withContext(Dispatchers.IO){
+        var changesList: MutableList<String>? = null
         //getAllResults
         val allResults = covidApi.getFullResults()
-        //Timber.d("#1 $allResults")
+//        Timber.d("#1 $allResults")
         val apiData = covidApi.getCountries("cases")
-     //   Timber.d("#2 ${apiData[0].cases}")
+//        Timber.d("#2 ${apiData[0].cases}")
 
         sharedPreference.saveAllCountriesResult(allResults)
 //        localDatabaseSource.insert(apiData)
@@ -31,8 +31,8 @@ class DataRepository @Inject constructor(
         val subscribedData = localDatabaseSource.getSubscribedCountries()
 
 //        Timber.d("#3 #4 ${subscribedData[0].cases}")
-//        subscribedData[0].cases = 10000000
-//        subscribedData[1].cases = 5000000
+//        subscribedData[0].cases = 1000
+//        subscribedData[1].cases = 500
 
         //update ApiData
         if(subscribedData.isNotEmpty()) {
@@ -42,7 +42,7 @@ class DataRepository @Inject constructor(
             }
         }
         localDatabaseSource.insert(apiData)
-    //    Timber.d("#7 save to database")
+//        Timber.d("#7 save to database")
         return@withContext changesList
     }
 
