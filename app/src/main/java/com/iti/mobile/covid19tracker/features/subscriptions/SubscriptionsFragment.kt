@@ -10,10 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
+import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentSubscriptionsBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.utils.Clickable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,9 +66,17 @@ class SubscriptionsFragment : Fragment(), Clickable {
         (activity as AppCompatActivity).supportActionBar?.title = "Subscription"
     }
 
-    override fun onItemClick(country: Country) {
+    override fun onItemClickAddToSubscriptions(country: Country) {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateCountry(country)
         }
+    }
+
+    override fun onItemClickGetCountryHistory(countryName: String,detailsCountryCardLayoutBinding: DetailsCountryCardLayoutBinding): CountryHistory {
+        var countryHistory = CountryHistory()
+        CoroutineScope(Dispatchers.IO).launch {
+            countryHistory = viewModel.getCountryHistory(countryName)
+        }
+        return countryHistory
     }
 }

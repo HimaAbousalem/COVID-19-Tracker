@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="600dp"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/all_margin"
+    >
+<androidx.appcompat.widget.AppCompatTextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Settings"
+    android:textStyle="bold"
+    android:textSize="20dp"
+    android:textAlignment="center"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/notificationOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/all_margin"
+        android:text="Notifications"
+        android:textSize="18dp"/>
+    <LinearLayout
+        android:id="@+id/showNotificationSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subscriptions"
+            android:textColor="@android:color/black"/>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:text="Notify me about activity from the countries I'm subscribed to" />
+            <Switch
+                android:id="@+id/switchGroup"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="50dp"
+
+                />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButtonGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:checkedButton="@id/button1">
+
+            <Button
+                android:id="@+id/button1"
+                android:backgroundTint="@color/colorPrimary"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="One hour" />
+
+            <Button
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/button2"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Two hours" />
+
+            <Button
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/button3"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Never"
+
+                />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="?android:attr/listDivider" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:layout_margin="@dimen/all_margin"
+        android:textSize="18dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="?android:attr/listDivider" />
+    <Button
+        android:layout_marginTop="@dimen/all_margin"
+        android:layout_marginStart="@dimen/all_margin"
+        android:layout_marginEnd="@dimen/all_margin"
+        android:id="@+id/updateSetting"
+        android:theme="@style/ShapeAppearance.App.SmallComponent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_gravity="bottom"
+        android:text="Update" />
+
+    <Button
+        android:id="@+id/cancelSetting"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/white"
+        android:layout_marginStart="@dimen/all_margin"
+        android:layout_marginEnd="@dimen/all_margin"
+        android:layout_marginBottom="@dimen/all_margin"
+        android:theme="@style/Widget.AppCompat.Light.ActionButton.Overflow"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@android:string/cancel" />
+</LinearLayout>

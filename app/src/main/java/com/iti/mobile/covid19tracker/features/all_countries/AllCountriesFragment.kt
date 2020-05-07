@@ -1,6 +1,9 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
+import android.app.Dialog
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -13,12 +16,17 @@ import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
+import com.iti.mobile.covid19tracker.databinding.ActivitySettingsBinding
+import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
+import com.iti.mobile.covid19tracker.features.settings.setupNotification
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.utils.Clickable
+import com.iti.mobile.covid19tracker.utils.DrawCountryHistoryData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +45,8 @@ class AllCountriesFragment : Fragment(), Clickable {
     lateinit var countriesList: List<Country>
     lateinit var allResults: AllResults
     lateinit var mergeAdapter: MergeAdapter
+    lateinit var  dialog: Dialog
+    lateinit var bindingSetting: ActivitySettingsBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,9 +62,11 @@ class AllCountriesFragment : Fragment(), Clickable {
 //        WorkManager.getInstance(requireActivity()).enqueue(
 //            OneTimeWorkRequestBuilder<SyncWork>().build()
 //        )
+
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
+        setupSettingView()
         fetchData()
         setupToolbar()
         return binding.root
@@ -65,6 +77,16 @@ class AllCountriesFragment : Fragment(), Clickable {
         val toolbar = binding.appToolBar.appToolBar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "All Affected Countries"
+    }
+    fun setupSettingView (){
+        dialog = Dialog( this.requireContext() )
+        dialog.setTitle("Settings")
+        bindingSetting = ActivitySettingsBinding.inflate(layoutInflater)
+        dialog.setContentView(bindingSetting.root)
+        setupNotification(bindingSetting)
+        bindingSetting.cancelSetting.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     private fun setupRecycleView() {
@@ -89,14 +111,14 @@ class AllCountriesFragment : Fragment(), Clickable {
 //        }
 
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
-            Timber.d(Thread.currentThread().name)
+           // Timber.d(Thread.currentThread().name)
             countriesList = data
             displayList.addAll(data)
             displayCountries(countriesList)
 
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
-            Timber.d("Observer : $it")
+           // Timber.d("Observer : $it")
             allResults = it
             allResultsAdapter.allResults = it
             mergeAdapter.adapters.first().notifyDataSetChanged()
@@ -107,8 +129,18 @@ class AllCountriesFragment : Fragment(), Clickable {
     fun displayCountries(countriesList: List<Country>) {
         countriesAdapter.countries = countriesList.toMutableList()
         mergeAdapter.adapters.last().notifyDataSetChanged()
-        if (countriesAdapter.itemCount > 0) {
-            // activity.visibility = View.INVISIBLE
+        if ( countriesAdapter.itemCount == 0) {
+            binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
+            binding.noDataLayout.noDataTextView.text = "no internet."
+              //  Resources.getSystem().getText(R.string.no_internet)
+            binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
+            binding.noDataLayout.retryAgainButton.setOnClickListener {
+                //TODO:- check internet and call worker
+            }
+            binding.allCountriesRecyclerview.visibility = View.GONE
+        }else {
+            binding.allCountriesRecyclerview.visibility = View.VISIBLE
+            binding.noDataLayout.noDataTextView.visibility = View.GONE
         }
     }
 
@@ -142,22 +174,19 @@ class AllCountriesFragment : Fragment(), Clickable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
-            //TODO:- open setting view
+            dialog.show()
             return true
         }
         if (item.itemId == R.id.app_bar_search) {
             val searchView = item.actionView as SearchView
-            Timber.d("before $countriesList")
             fromView(searchView).observe(this, Observer { word ->
                 displayList.clear()
-                Timber.d(countriesList.toString())
                 countriesList.forEach {
                     if (it.country.contains(word)) {
                         displayList.add(it)
                     }
                 }
                 displayCountries(displayList)
-                Timber.d(word.toString())
             })
             fromView(searchView).observe(this, Observer { word ->
                 if (word.isNotEmpty()) {
@@ -175,11 +204,28 @@ class AllCountriesFragment : Fragment(), Clickable {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onItemClick(country: Country) {
+//Clickable Interface
+    override fun onItemClickAddToSubscriptions(country: Country) {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateCountry(country)
         }
+    }
+
+    override fun onItemClickGetCountryHistory(countryName: String ,detailsCountryCardLayoutBinding:DetailsCountryCardLayoutBinding )
+            : CountryHistory {
+        var countryHistory = CountryHistory()
+        CoroutineScope(Dispatchers.IO).launch {
+           countryHistory = viewModel.getCountryHistory(countryName)
+            Log.i("char",countryHistory.toString())
+            context?.let {
+                DrawCountryHistoryData(
+                    detailsCountryCardLayoutBinding,
+                    countryHistory,
+                    it
+                )
+            }
+        }
+        return countryHistory
     }
 
 

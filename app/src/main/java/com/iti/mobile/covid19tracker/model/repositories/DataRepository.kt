@@ -2,6 +2,8 @@ package com.iti.mobile.covid19tracker.model.repositories
 
 import androidx.lifecycle.LiveData
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.entities.CountryHistory
+import com.iti.mobile.covid19tracker.model.entities.CountryHistoryDetails
 import com.iti.mobile.covid19tracker.model.network.CovidApi
 import com.iti.mobile.covid19tracker.model.room.LocalDatabaseSource
 import com.iti.mobile.covid19tracker.model.shared_prefrence.SharedPreferenceHandler
@@ -58,4 +60,7 @@ class DataRepository @Inject constructor(
         localDatabaseSource.update(country)
     }
 
+    suspend fun getCountryHistory (country:String) : CountryHistory {
+       return covidApi.getCountryHistory(country)
+    }
 }

@@ -1,4 +1,4 @@
-package com.iti.mobile.covid19tracker.model.sync
+package com.iti.mobile.covid19tracker.work_manager
 
 import android.content.Context
 import androidx.work.CoroutineWorker
@@ -20,18 +20,19 @@ class SyncWork @Inject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         var job = repo.updateDataBase()
         Timber.d("#8 You have the data + $job")
-        if(job?.isNotEmpty()!!) {
-            var notificationText = "There is a changes happens in ("
-            for(data in job.indices) {
-                notificationText += if(data == 0 )
-                    job[data]
-                else
-                    ", ${job[data]}"
+        if (job != null) {
+            if(job?.isNotEmpty()!!) {
+                var notificationText = "There is a changes happens in ("
+                for (data in job.indices) {
+                    notificationText += if (data == 0)
+                        job[data]
+                    else
+                        ", ${job[data]}"
 
+                }
+                notificationText += ")"
+                makeStatusNotification(applicationContext, notificationText)
             }
-            notificationText+= ")"
-            makeStatusNotification(applicationContext, notificationText)
-
         }
         Result.success()
     }
@@ -42,7 +43,11 @@ class SyncWork @Inject constructor(
     ): ChildWorkerFactory {
 
         override fun create(appContext: Context, params: WorkerParameters): CoroutineWorker {
-            return SyncWork(myRepository, appContext, params)
+            return SyncWork(
+                myRepository,
+                appContext,
+                params
+            )
         }
     }
 }

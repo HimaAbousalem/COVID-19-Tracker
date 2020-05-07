@@ -6,7 +6,7 @@ import com.iti.mobile.covid19tracker.BuildConfig
 import com.iti.mobile.covid19tracker.dagger.component.CovidAppComponent
 import com.iti.mobile.covid19tracker.dagger.component.DaggerCovidAppComponent
 import com.iti.mobile.covid19tracker.dagger.modules.app.ApplicationModule
-import com.iti.mobile.covid19tracker.model.sync.SyncWork
+import com.iti.mobile.covid19tracker.work_manager.SyncWork
 import com.iti.mobile.covid19tracker.utils.WORK_MANAGER_KEY
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -40,6 +40,7 @@ class Covid19App : Application(){
             .setBackoffCriteria(BackoffPolicy.LINEAR, 2, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
+       WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
     }
 }

@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.iti.mobile.covid19tracker.model.sync.ChildWorkerFactory
+import com.iti.mobile.covid19tracker.work_manager.ChildWorkerFactory
 import javax.inject.Inject
 import javax.inject.Provider
 
