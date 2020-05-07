@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,16 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/all_margin"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:visibility="visible"
-            android:weightSum="3">
+            android:weightSum="3"
+           >
 
             <LinearLayout
 
@@ -106,9 +105,18 @@
             </LinearLayout>
         </LinearLayout>
 
-        <include
+        <FrameLayout
             android:id="@+id/graph_layout"
-            layout="@layout/statistics_layout"
- />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/all_margin"
+>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
     </LinearLayout>
 </merge>

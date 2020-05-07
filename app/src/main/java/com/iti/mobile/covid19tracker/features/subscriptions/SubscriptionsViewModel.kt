@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.model.repositories.DataRepository
 import javax.inject.Inject
 
@@ -14,5 +15,8 @@ class SubscriptionsViewModel @Inject constructor(private val repository: DataRep
     }
     suspend fun updateCountry(country: Country){
         repository.updateCountrySubscription(country)
+    }
+    suspend fun getCountryHistory (country:String) : CountryHistory {
+        return repository.getCountryHistory(country)
     }
 }

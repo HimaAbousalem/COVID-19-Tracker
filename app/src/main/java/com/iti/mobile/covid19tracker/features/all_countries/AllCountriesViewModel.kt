@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.model.repositories.DataRepository
 import javax.inject.Inject
 
@@ -23,6 +24,9 @@ class AllCountriesViewModel @Inject constructor(private val dataRepository: Data
 
     suspend fun updateCountry(country: Country){
         dataRepository.updateCountrySubscription(country)
+    }
+    suspend fun getCountryHistory (country:String) : CountryHistory {
+        return dataRepository.getCountryHistory(country)
     }
 
 }
