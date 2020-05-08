@@ -3,6 +3,7 @@ package com.iti.mobile.covid19tracker.features.all_countries
 import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -15,14 +16,18 @@ import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
+import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.features.subscriptions.SubscriptionsAdapter
+
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.utils.Clickable
+import com.iti.mobile.covid19tracker.utils.DrawCountryHistoryData
 import com.iti.mobile.covid19tracker.utils.setupNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,6 +79,7 @@ class AllCountriesFragment : Fragment(), Clickable {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "All Affected Countries"
     }
+
 
     private fun setupRecycleView() {
         displayList = mutableListOf()

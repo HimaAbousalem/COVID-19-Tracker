@@ -9,17 +9,24 @@ fun updateApiList(apiList: List<Country>, subscribedList: List<Country>){
     }
 }
 
-fun calculateTheDifferences(subscribedData: List<Country>, apiData: List<Country>): MutableList<Country> {
-    val changes = mutableListOf<Country>()
-    val subscribedCountries = apiData.filter { it.subscription == 1 }
+fun calculateTheDifferences(subscribedData: List<Country>, apiData: List<Country>): MutableList<String> {
+    val changes = mutableListOf<String>()
+    val subscribedCountries = apiData.filter {
+        it.subscription == 1
+    }
     subscribedData.forEach {subscribed->
         subscribedCountries.filter { api-> api.country == subscribed.country }
             .forEach { api->
-                api.cases = if( api.cases - subscribed.cases > 0) api.cases - subscribed.cases else 0
-                api.deaths = if( api.deaths - subscribed.deaths > 0 ) api.deaths - subscribed.deaths else  0
-                api.recovered = if( api.recovered - subscribed.recovered > 0 ) api.recovered - subscribed.recovered else  0
-                changes.add(api)
+                if( api.cases > subscribed.cases || api.deaths > subscribed.deaths || api.recovered > subscribed.recovered) {
+                    changes.add(api.country)
+                }
             }
     }
+
+//    if(changes.isNotEmpty()){
+//        Timber.d("changes is : ${changes[0]}")
+//        Timber.d("changes is : ${changes.size}")
+//    }
+
     return changes
 }

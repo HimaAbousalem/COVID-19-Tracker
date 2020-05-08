@@ -64,11 +64,11 @@ class SubscriptionsAdapter(val listener: Clickable): ListAdapter<Country, Subscr
                 if (countryData.subscription == SUBSCRIBED){
                   //  itemView.subscribe_button.setImageResource(R.drawable.ic_miscellaneous)
                     countryData.subscription = UN_SUBSCRIBED
-                    listener.onItemClick(countryData)
+                    listener.onItemClickAddToSubscriptions(countryData)
                 }  else {
                    // itemView.subscribe_button.setImageResource(R.drawable.ic_notifications_black_24dp)
                     countryData.subscription = SUBSCRIBED
-                    listener.onItemClick(countryData)
+                    listener.onItemClickAddToSubscriptions(countryData)
                 }
             }
         }
