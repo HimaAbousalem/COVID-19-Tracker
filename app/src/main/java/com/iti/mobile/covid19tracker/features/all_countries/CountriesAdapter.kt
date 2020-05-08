@@ -70,15 +70,15 @@ class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
                 holder.showDetailsButton.visibility = View.VISIBLE
                 holder.hideDetails.visibility = View.GONE
                 holder.showingDetails.visibility = View.GONE
-               detailsCountryCardLayoutBinding.graphLayout.visibility = View.GONE
+            //   detailsCountryCardLayoutBinding.graphLayout.visibility = View.GONE
             }else {
                 holder.showDetailsButton.visibility = View.GONE
                 holder.hideDetails.visibility = View.VISIBLE
                 holder.showingDetails.visibility = View.VISIBLE
-                detailsCountryCardLayoutBinding.graphLayout.visibility = View.VISIBLE
+               // detailsCountryCardLayoutBinding.graphLayout.visibility = View.VISIBLE
 
-               val countryName = countries[position].country
-                listener.onItemClickGetCountryHistory(countryName, detailsCountryCardLayoutBinding)
+               //val countryName = countries[position].country
+              //  listener.onItemClickGetCountryHistory(countryName, detailsCountryCardLayoutBinding)
 
             }
         }
@@ -99,10 +99,10 @@ class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
 
           if (countries[position].subscription == SUBSCRIBED){
               countries[position].subscription = UN_SUBSCRIBED
-              listener.onItemClickAddToSubscriptions(countries[position])
+              listener.onItemClick(countries[position])
           }  else {
               countries[position].subscription = SUBSCRIBED
-              listener.onItemClickAddToSubscriptions(countries[position])
+              listener.onItemClick(countries[position])
           }
         }
     }

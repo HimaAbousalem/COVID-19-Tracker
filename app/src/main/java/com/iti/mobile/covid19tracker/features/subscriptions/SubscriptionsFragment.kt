@@ -66,17 +66,10 @@ class SubscriptionsFragment : Fragment(), Clickable {
         (activity as AppCompatActivity).supportActionBar?.title = "Subscription"
     }
 
-    override fun onItemClickAddToSubscriptions(country: Country) {
+    override fun onItemClick(country: Country) {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateCountry(country)
         }
     }
 
-    override fun onItemClickGetCountryHistory(countryName: String,detailsCountryCardLayoutBinding: DetailsCountryCardLayoutBinding): CountryHistory {
-        var countryHistory = CountryHistory()
-        CoroutineScope(Dispatchers.IO).launch {
-            countryHistory = viewModel.getCountryHistory(countryName)
-        }
-        return countryHistory
-    }
 }
