@@ -101,10 +101,4 @@
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
-    <include
-        android:id="@+id/graph_layout"
-        layout="@layout/statistics_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
 </merge>

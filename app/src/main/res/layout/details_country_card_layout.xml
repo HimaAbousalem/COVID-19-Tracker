@@ -106,9 +106,5 @@
             </LinearLayout>
         </LinearLayout>
 
-        <include
-            android:id="@+id/graph_layout"
-            layout="@layout/statistics_layout"
- />
     </LinearLayout>
 </merge>

@@ -1,5 +1,6 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
+import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
@@ -15,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
+import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
+import com.iti.mobile.covid19tracker.features.subscriptions.SubscriptionsAdapter
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.utils.Clickable
+import com.iti.mobile.covid19tracker.utils.setupNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,9 +35,11 @@ class AllCountriesFragment : Fragment(), Clickable {
     lateinit var viewmodelFactory: ViewModelProvidersFactory
     lateinit var viewModel: AllCountriesViewModel
     private lateinit var binding: FragmentAllCountriesBinding
-    lateinit var countriesAdapter: CountriesAdapter
+    lateinit var countriesAdapter: SubscriptionsAdapter
     private lateinit var allResultsAdapter: AllResultsAdapter
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var settingsViewBinding: SettingsViewBinding
+    private lateinit var dialog: Dialog
     lateinit var displayList: MutableList<Country>
     lateinit var countriesList: List<Country>
     lateinit var allResults: AllResults
@@ -56,6 +62,7 @@ class AllCountriesFragment : Fragment(), Clickable {
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
+        setupSettingView()
         fetchData()
         setupToolbar()
         return binding.root
@@ -75,7 +82,7 @@ class AllCountriesFragment : Fragment(), Clickable {
         layoutManager = LinearLayoutManager(activity)
         binding.allCountriesRecyclerview.setHasFixedSize(true)
         binding.allCountriesRecyclerview.layoutManager = layoutManager
-        countriesAdapter = CountriesAdapter(countriesList, this)
+        countriesAdapter = SubscriptionsAdapter( this)
         allResultsAdapter = AllResultsAdapter(allResults)
         allResultsAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -104,14 +111,25 @@ class AllCountriesFragment : Fragment(), Clickable {
         })
 
     }
+    fun setupSettingView (){
+        dialog = Dialog( this.requireContext() )
+        dialog.setTitle("Settings")
+        settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
+        dialog.setContentView(settingsViewBinding.root)
+        setupNotification(settingsViewBinding)
+        settingsViewBinding.cancelSetting.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
 
     fun displayCountries(countriesList: List<Country>) {
-        countriesAdapter.countries = countriesList.toMutableList()
+       // countriesAdapter.countries = countriesList.toMutableList()
+        countriesAdapter.submitList(countriesList)
         mergeAdapter.adapters.last().notifyDataSetChanged()
-        if (countriesAdapter.itemCount > 0) {
+        if (countriesAdapter.itemCount == 0) {
             binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
-            binding.noDataLayout.noDataTextView.text =
-                Resources.getSystem().getText(R.string.no_internet)
+            binding.noDataLayout.noDataTextView.text = "nooo"
+//                Resources.getSystem().getText(R.string.no_internet)
             binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
             binding.noDataLayout.retryAgainButton.setOnClickListener {
                 //TODO:- check internet and call worker
@@ -154,6 +172,7 @@ class AllCountriesFragment : Fragment(), Clickable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
             //TODO:- open setting view
+            dialog.show()
             return true
         }
         if (item.itemId == R.id.app_bar_search) {

@@ -85,15 +85,12 @@ class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
         }else {
             holder.subscribe.setImageResource(R.drawable.ic_miscellaneous)
         }
-
         holder.subscribe.setOnClickListener{
 
           if (countries[position].subscription == SUBSCRIBED){
-              holder.subscribe.setImageResource(R.drawable.ic_miscellaneous)
               countries[position].subscription = UN_SUBSCRIBED
               listener.onItemClick(countries[position])
           }  else {
-              holder.subscribe.setImageResource(R.drawable.ic_notifications_black_24dp)
               countries[position].subscription = SUBSCRIBED
               listener.onItemClick(countries[position])
           }
