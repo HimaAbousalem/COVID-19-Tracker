@@ -20,18 +20,19 @@
         android:id="@+id/notificationOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/all_margin"
+
         android:text="Notifications"
         android:textSize="18dp"/>
     <LinearLayout
         android:id="@+id/showNotificationSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Subscriptions"
             android:textColor="@android:color/black"/>
         <LinearLayout
@@ -59,32 +60,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             app:checkedButton="@id/button1">
 
             <Button
                 android:id="@+id/button1"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/white"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="One hour" />
+                android:text="One hour"
+                android:textSize="14dp"/>
 
             <Button
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/white"
                 android:id="@+id/button2"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="14dp"
                 android:text="Two hours" />
 
             <Button
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/white"
                 android:id="@+id/button3"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Never"
+                android:textSize="14dp"
+                android:text="24 Hour"
 
                 />
         </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -94,17 +98,6 @@
         android:layout_height="4dp"
         android:background="?android:attr/listDivider" />
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="About"
-        android:layout_margin="@dimen/all_margin"
-        android:textSize="18dp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="?android:attr/listDivider" />
     <Button
         android:layout_marginTop="@dimen/all_margin"
         android:layout_marginStart="@dimen/all_margin"
@@ -115,7 +108,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:layout_gravity="bottom"
-        android:text="Update" />
+        android:text="save changes" />
 
     <Button
         android:id="@+id/cancelSetting"

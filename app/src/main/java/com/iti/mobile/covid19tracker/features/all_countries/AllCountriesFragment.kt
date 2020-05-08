@@ -40,7 +40,7 @@ class AllCountriesFragment : Fragment(), Clickable {
     lateinit var viewmodelFactory: ViewModelProvidersFactory
     lateinit var viewModel: AllCountriesViewModel
     private lateinit var binding: FragmentAllCountriesBinding
-    lateinit var countriesAdapter: SubscriptionsAdapter
+    lateinit var countriesAdapter: CountriesAdapter
     private lateinit var allResultsAdapter: AllResultsAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var settingsViewBinding: SettingsViewBinding
@@ -49,6 +49,7 @@ class AllCountriesFragment : Fragment(), Clickable {
     lateinit var countriesList: List<Country>
     lateinit var allResults: AllResults
     lateinit var mergeAdapter: MergeAdapter
+    var isSearchStarted = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -88,7 +89,8 @@ class AllCountriesFragment : Fragment(), Clickable {
         layoutManager = LinearLayoutManager(activity)
         binding.allCountriesRecyclerview.setHasFixedSize(true)
         binding.allCountriesRecyclerview.layoutManager = layoutManager
-        countriesAdapter = SubscriptionsAdapter( this)
+        //countriesAdapter = SubscriptionsAdapter( this)
+        countriesAdapter = CountriesAdapter(countriesList,this)
         allResultsAdapter = AllResultsAdapter(allResults)
         allResultsAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -105,8 +107,9 @@ class AllCountriesFragment : Fragment(), Clickable {
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
            // Timber.d(Thread.currentThread().name)
             countriesList = data
-            displayList.addAll(data)
-            displayCountries(countriesList)
+            //displayList.addAll(data)
+           if(isSearchStarted)
+               displayCountries(countriesList)
 
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
@@ -129,8 +132,8 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
 
     fun displayCountries(countriesList: List<Country>) {
-       // countriesAdapter.countries = countriesList.toMutableList()
-        countriesAdapter.submitList(countriesList)
+        countriesAdapter.countries = countriesList.toMutableList()
+       // countriesAdapter.submitList(countriesList)
         mergeAdapter.adapters.last().notifyDataSetChanged()
         if (countriesAdapter.itemCount == 0) {
             binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
@@ -152,16 +155,17 @@ class AllCountriesFragment : Fragment(), Clickable {
         var liveData = MutableLiveData<String>()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
-                val text = newText
-                    .toString()
+                val text = newText.toString()
                 if (text.matches(Regex("[a-z A-Z]*"))) {
                     liveData.value = text.trim()
+                    isSearchStarted = false
                 }
                 return false
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 liveData.value = query
+                isSearchStarted = false
                 return false
             }
         })
@@ -177,21 +181,11 @@ class AllCountriesFragment : Fragment(), Clickable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
-            //TODO:- open setting view
             dialog.show()
             return true
         }
         if (item.itemId == R.id.app_bar_search) {
             val searchView = item.actionView as SearchView
-            fromView(searchView).observe(this, Observer { word ->
-                displayList.clear()
-                countriesList.forEach {
-                    if (it.country.contains(word)) {
-                        displayList.add(it)
-                    }
-                }
-                displayCountries(displayList)
-            })
             fromView(searchView).observe(this, Observer { word ->
                 if (word.isNotEmpty()) {
                     displayList.clear()
@@ -203,6 +197,7 @@ class AllCountriesFragment : Fragment(), Clickable {
                     displayCountries(displayList)
                 } else {
                     displayCountries(countriesList)
+                    isSearchStarted = true
                 }
             })
         }

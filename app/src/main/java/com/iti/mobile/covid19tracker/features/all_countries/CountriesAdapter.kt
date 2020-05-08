@@ -27,6 +27,7 @@ class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
     var countries: MutableList<Country> = countries.toMutableList()
     lateinit var context: Context
     inner class CountriesHolder(itemView: View) :
+
         RecyclerView.ViewHolder(itemView) {
         val country: TextView = itemView.findViewById(R.id.country_textview)
         val confirmed: TextView = itemView.findViewById(R.id.confirmed_cases)
@@ -100,9 +101,12 @@ class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
           if (countries[position].subscription == SUBSCRIBED){
               countries[position].subscription = UN_SUBSCRIBED
               listener.onItemClick(countries[position])
+              holder.subscribe.setImageResource(R.drawable.ic_miscellaneous)
+
           }  else {
               countries[position].subscription = SUBSCRIBED
               listener.onItemClick(countries[position])
+              holder.subscribe.setImageResource(R.drawable.ic_notifications_black_24dp)
           }
         }
     }
