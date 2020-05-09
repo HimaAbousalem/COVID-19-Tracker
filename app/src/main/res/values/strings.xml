@@ -17,4 +17,5 @@
     <string name="today_cases">Today Cases</string>
     <string name="today_deaths">Today Deaths</string>
     <string name="critical">Critical</string>
+    <string name="statistics">Statistics</string>
 </resources>

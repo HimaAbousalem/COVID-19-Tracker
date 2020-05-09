@@ -43,11 +43,46 @@ lateinit var binding: FragmentStatisticsBinding
 
         viewModel.getAllHistory().observe(requireActivity(), Observer {
             when(it){
-                is LoadingState-> { if(it.loading) Timber.d("Loading") else Timber.d("Finish Loading")}
-                is SuccessState-> context?.let { context -> drawCountryHistoryData(binding, it.data, context) }
-                is ErrorState -> Timber.d(it.exception)
+                is LoadingState-> {
+                    if (it.loading) {
+                       // Timber.d("Loading")
+                        setupNoData("Loading data .....", 1)
+                    } else {
+                        Timber.d("Finish Loading")
+                    }
+                }
+                    is SuccessState->{
+                        context?.let { context ->
+                            drawCountryHistoryData(
+                                binding,
+                                it.data,
+                                context
+                            )
+                        }
+                    }
+
+
+                    is ErrorState -> {
+                        Timber.d(it.exception)
+                        setupNoData("No Internet Connection is available!", 0)
+                    }
+
             }
         })
         return binding.root
+    }
+
+    fun setupNoData (text:String,status:Int){
+        binding.chart.visibility = View.GONE
+        binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
+        binding.noDataLayout.noDataTextView.text = text
+       if (status == 0){
+           binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
+           binding.noDataLayout.retryAgainButton.setOnClickListener {
+               //TODO : chack internet
+           }
+       }
+
+
     }
 }

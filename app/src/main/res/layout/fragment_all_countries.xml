@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.all_countries.AllCountriesFragment">
@@ -13,20 +12,39 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toTopOf="@id/all_countries_recyclerview"/>
+      app:layout_constraintBottom_toTopOf="@id/fragment_layout"/>
+<com.airbnb.lottie.LottieAnimationView
+    android:id="@+id/lottie_covid"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginTop="5dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/app_tool_bar"
+    app:layout_constraintBottom_toTopOf="@id/fragment_layout"
+    app:lottie_rawRes="@raw/doctors"
+    app:lottie_autoPlay="true"
+    app:lottie_loop="true"
+  >
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/all_countries_recyclerview"
+</com.airbnb.lottie.LottieAnimationView>
+  <FrameLayout
+      android:id="@+id/fragment_layout"
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      android:background="#00DB2E2E"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/app_tool_bar"/>
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/lottie_covid">
 
-  <include  layout="@layout/no_data_layout"
-      android:id="@+id/noData_Layout"
-      />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_countries_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00DB2E2E" />
 
+    <include
+        android:id="@+id/noData_Layout"
+        layout="@layout/no_data_layout" />
+  </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

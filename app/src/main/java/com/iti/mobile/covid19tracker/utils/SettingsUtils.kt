@@ -1,35 +1,31 @@
 package com.iti.mobile.covid19tracker.utils
 
+import android.content.Context
 import android.view.View
-import androidx.core.view.isVisible
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
+import com.iti.mobile.covid19tracker.features.base.scheduleWork
 
-fun setupNotification (binding: SettingsViewBinding) {
-    binding.notificationOption.setOnClickListener {
-        if (binding.showNotificationSetting.isVisible) {
-            binding.showNotificationSetting.visibility = View.GONE
-        } else {
-            binding.showNotificationSetting.visibility = View.VISIBLE
-            binding.switchGroup.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    binding.toggleButtonGroup.visibility = View.VISIBLE
-                } else {
-                    binding.toggleButtonGroup.visibility = View.GONE
-                }
-            }
+fun setupNotification (binding: SettingsViewBinding , context: Context) {
+    var buttonTime : Long = 0
+    binding.switchGroup.isEnabled = false
+    binding.toggleButtonGroup.visibility = View.VISIBLE
+    binding.toggleButtonGroup.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+
+        if(binding.button1.id == checkedId){
+          if (isChecked)
+             buttonTime = UPDATE_ONE_HOUR
+        }
+        if (binding.button2.id == checkedId){
+            if (isChecked)
+                buttonTime = UPDATE_TWO_HOUR
+        }
+        if(binding.button3.id == checkedId){
+            if (isChecked)
+                buttonTime = UPDATE_DAY
         }
     }
-    binding.toggleButtonGroup.isSingleSelection = true
-    binding.toggleButtonGroup.addOnButtonCheckedListener { _, checkedId, _ ->
-        if(checkedId == 0){
-            print("0")
-        }else if (checkedId == 1){
-            print("1")
-        }else{
-            print("2")
-        }
+    binding.updateSetting.setOnClickListener {
+       if (buttonTime != 0L)
+            scheduleWork(buttonTime,context, SETTINGS_REQUEST)
     }
-}
-fun setupUpdataButton () {
-
 }

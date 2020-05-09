@@ -1,6 +1,7 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.app.Dialog
+import android.net.Network
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -97,8 +98,7 @@ class AllCountriesFragment : Fragment(), Clickable {
                 if(isSearchStarted)
                     displayCountries(countriesList)
             }else{
-                //TODO Show NO Internet UI
-                activity?.toast("No Internet!")
+                showNoDataLayout()
             }
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
@@ -113,26 +113,28 @@ class AllCountriesFragment : Fragment(), Clickable {
         dialog.setTitle("Settings")
         settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
         dialog.setContentView(settingsViewBinding.root)
-        setupNotification(settingsViewBinding)
+        setupNotification(settingsViewBinding,requireActivity())
         settingsViewBinding.cancelSetting.setOnClickListener {
             dialog.dismiss()
         }
     }
 
     fun displayCountries(countriesList: List<Country>) {
+        binding.allCountriesRecyclerview.visibility = View.VISIBLE
+        binding.noDataLayout.noDataLayout.visibility = View.GONE
         countriesAdapter.countries = countriesList.toMutableList()
         mergeAdapter.adapters.last().notifyDataSetChanged()
-        if (countriesAdapter.itemCount == 0) {
-            binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
-            binding.noDataLayout.noDataTextView.text = "nooo"
-            binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
-            binding.noDataLayout.retryAgainButton.setOnClickListener {
-                //TODO:- check internet and call worker
-            }
-            binding.allCountriesRecyclerview.visibility = View.GONE
-        }else {
-            binding.allCountriesRecyclerview.visibility = View.VISIBLE
-            binding.noDataLayout.noDataTextView.visibility = View.GONE
+
+    }
+
+    fun showNoDataLayout (){
+        binding.allCountriesRecyclerview.visibility = View.GONE
+        binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
+        binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
+        binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
+        binding.noDataLayout.retryAgainButton.setOnClickListener {
+            //TODO:- check internet
+
         }
     }
 
@@ -190,6 +192,8 @@ class AllCountriesFragment : Fragment(), Clickable {
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 
     override fun onItemClick(country: Country) {
         CoroutineScope(Dispatchers.IO).launch {

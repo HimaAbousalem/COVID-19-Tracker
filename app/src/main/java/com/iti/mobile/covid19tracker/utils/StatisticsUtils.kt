@@ -2,6 +2,7 @@ package com.iti.mobile.covid19tracker.utils
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.XAxis
@@ -22,7 +23,7 @@ import com.iti.mobile.covid19tracker.model.entities.CountryHistoryDetails
 fun setDataIntoGraph ( binding: FragmentStatisticsBinding, baseContext : Context, countryHistoryDetails: CountryHistoryDetails ){
     //all cases
     val casesLineDataSet = LineDataSet(countryHistoryDetails.cases?.let { datavalues(it) },"Cases")
-    casesLineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
+    casesLineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.colorPrimaryDark))
     casesLineDataSet.color = ContextCompat.getColor(baseContext, R.color.cases)
     casesLineDataSet.setDrawFilled(true)
     casesLineDataSet.fillFormatter = FillFormatter { _, _ ->
@@ -32,7 +33,7 @@ fun setDataIntoGraph ( binding: FragmentStatisticsBinding, baseContext : Context
     //recovered
     val recovedLineDataSet = LineDataSet(countryHistoryDetails.recovered?.let { datavalues(it) },"Recovered")
     recovedLineDataSet.setDrawFilled(true)
-    recovedLineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
+    recovedLineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.colorPrimaryDark))
     recovedLineDataSet.color = ContextCompat.getColor(baseContext, R.color.recovered)
     recovedLineDataSet.fillFormatter = FillFormatter { _, _ ->
         return@FillFormatter binding.chart.axisLeft.axisMinimum
@@ -42,7 +43,7 @@ fun setDataIntoGraph ( binding: FragmentStatisticsBinding, baseContext : Context
     //deaths
     val deathsLineDataSet = LineDataSet(countryHistoryDetails.deaths?.let { datavalues(it) },"Deaths")
     deathsLineDataSet.setDrawFilled(true)
-    deathsLineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
+    deathsLineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.colorPrimaryDark))
     deathsLineDataSet.color = ContextCompat.getColor(baseContext, R.color.deaths)
     deathsLineDataSet.fillFormatter = FillFormatter { _, _ ->
         return@FillFormatter binding.chart.axisLeft.axisMinimum
@@ -93,14 +94,16 @@ fun setupView (binding: FragmentStatisticsBinding,lineData: LineData ,baseContex
     binding.chart.setDescriptionTextSize(20f)
     // enable touch gestures
      binding.chart.setTouchEnabled(true)
-    binding.chart.zoomIn()
+    binding.chart.zoom(3F,0.8f, 0.5F, 0.5F)
+   // binding.chart.setScaleEnabled(false)
+    binding.chart.isScaleXEnabled = false
     // set listeners
    // binding.chart.setOnChartValueSelectedListener()
     // enable scaling and dragging
-    binding.chart.isDragEnabled = true
-    binding.chart.setScaleEnabled(true)
-    binding.chart.isScaleXEnabled = true;
-    binding.chart.isScaleYEnabled = true;
+   // binding.chart.isDragEnabled = true
+   // binding.chart.setScaleEnabled(true)
+    //binding.chart.isScaleXEnabled = true;
+  //  binding.chart.isScaleYEnabled = true;
 
     // force pinch zoom along both axis
      //binding.chart.setPinchZoom(true)
@@ -130,6 +133,8 @@ fun setupView (binding: FragmentStatisticsBinding,lineData: LineData ,baseContex
     binding.chart.setDrawGridBackground(true)
     // binding.chart.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary))
     binding.chart.clear()
+    binding.chart.visibility = View.VISIBLE
+    binding.noDataLayout.noDataLayout.visibility = View.GONE
     binding.chart.data = lineData
     binding.chart.invalidate()
 
