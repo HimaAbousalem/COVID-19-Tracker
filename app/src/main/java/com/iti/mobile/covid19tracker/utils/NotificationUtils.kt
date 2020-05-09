@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.iti.mobile.covid19tracker.R
 
 fun makeStatusNotification(context: Context, changes: String) {
@@ -17,8 +18,14 @@ fun makeStatusNotification(context: Context, changes: String) {
             channel.description = "Covid19 subscription info changes."
             (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
         }
+        val pendingIntent = NavDeepLinkBuilder(context)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.subscriptionsFragment)
+            .createPendingIntent()
+
         val builder =  NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentIntent(pendingIntent)
                 .setContentTitle("Covid19 App")
                 .setContentText(changes)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
