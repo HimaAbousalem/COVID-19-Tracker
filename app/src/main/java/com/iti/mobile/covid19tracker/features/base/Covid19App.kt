@@ -2,6 +2,7 @@ package com.iti.mobile.covid19tracker.features.base
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.work.*
 import com.iti.mobile.covid19tracker.BuildConfig
 import com.iti.mobile.covid19tracker.dagger.component.CovidAppComponent
@@ -39,6 +40,7 @@ class Covid19App : Application(){
 
 }
 fun scheduleWork(timeInHour : Long , context: Context, requestType : Int) {
+    Log.i("worker",timeInHour.toString())
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()

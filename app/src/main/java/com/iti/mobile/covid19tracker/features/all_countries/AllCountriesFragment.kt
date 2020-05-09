@@ -113,10 +113,11 @@ class AllCountriesFragment : Fragment(), Clickable {
         dialog.setTitle("Settings")
         settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
         dialog.setContentView(settingsViewBinding.root)
-        setupNotification(settingsViewBinding,requireActivity())
+        setupNotification(settingsViewBinding,requireActivity(),dialog)
         settingsViewBinding.cancelSetting.setOnClickListener {
             dialog.dismiss()
         }
+
     }
 
     fun displayCountries(countriesList: List<Country>) {
