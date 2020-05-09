@@ -62,9 +62,6 @@ class AllCountriesFragment : Fragment(), Clickable {
             )
         ).inject(this)
         viewModel = ViewModelProvider(this, viewmodelFactory).get(AllCountriesViewModel::class.java)
-//        WorkManager.getInstance(requireActivity()).enqueue(
-//            OneTimeWorkRequestBuilder<SyncWork>().build()
-//        )
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
@@ -99,21 +96,12 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
 
     private fun fetchData() {
-        //TODO we need to check if this is the firstTime or not + check the internet!
-//        CoroutineScope(Dispatchers.IO).launch {
-//            viewModel.updateDatabase()
-//        }
-
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
-           // Timber.d(Thread.currentThread().name)
             countriesList = data
-            //displayList.addAll(data)
            if(isSearchStarted)
                displayCountries(countriesList)
-
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
-           // Timber.d("Observer : $it")
             allResults = it
             allResultsAdapter.allResults = it
             mergeAdapter.adapters.first().notifyDataSetChanged()
@@ -133,12 +121,10 @@ class AllCountriesFragment : Fragment(), Clickable {
 
     fun displayCountries(countriesList: List<Country>) {
         countriesAdapter.countries = countriesList.toMutableList()
-       // countriesAdapter.submitList(countriesList)
         mergeAdapter.adapters.last().notifyDataSetChanged()
         if (countriesAdapter.itemCount == 0) {
             binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
             binding.noDataLayout.noDataTextView.text = "nooo"
-//                Resources.getSystem().getText(R.string.no_internet)
             binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
             binding.noDataLayout.retryAgainButton.setOnClickListener {
                 //TODO:- check internet and call worker

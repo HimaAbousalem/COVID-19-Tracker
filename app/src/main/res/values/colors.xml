@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#591f57</color>
     <color name="colorAccent">#806680</color>
     <color name="white">#ffffff</color>
+    <color name="recovered" >#91B7C7</color>
+    <color name="deaths">#caa7a4</color>
+    <color name="cases">#F1E89E</color>
 </resources>

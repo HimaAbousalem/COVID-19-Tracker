@@ -37,7 +37,7 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
         setContentView(binding.root)
         (application as Covid19App).appComponent.controllerComponent(ControllerModule(this)).inject(this)
         setup()
-        getData()
+        //getData()
         val lineDataSet = LineDataSet(datavalues(),"Cases")
         val lineDataSet2 = LineDataSet(datavalues2(),"Deaths")
         lineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
@@ -139,12 +139,12 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
             yAxis.setAxisMinValue(-50f)
 
     }
-    fun getData (){
-         CoroutineScope(Dispatchers.IO).launch {
-             dataRepository.getCountryHistory("Egypt").timeLine
-                 ?.cases?.forEach {
-                     Log.i ("req",it.toString())
-                 }
-         }
-    }
+//    fun getData (){
+//         CoroutineScope(Dispatchers.IO).launch {
+//             dataRepository.getCountryHistory("Egypt").timeLine
+//                 ?.cases?.forEach {
+//                     Log.i ("req",it.toString())
+//                 }
+//         }
+//    }
 }
