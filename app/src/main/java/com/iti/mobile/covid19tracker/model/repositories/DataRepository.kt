@@ -1,9 +1,11 @@
 package com.iti.mobile.covid19tracker.model.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.model.entities.CountryHistoryDetails
+import com.iti.mobile.covid19tracker.model.entities.ResultState
 import com.iti.mobile.covid19tracker.model.network.CovidApi
 import com.iti.mobile.covid19tracker.model.room.LocalDatabaseSource
 import com.iti.mobile.covid19tracker.model.shared_prefrence.SharedPreferenceHandler
@@ -21,21 +23,9 @@ class DataRepository @Inject constructor(
         var changesList: MutableList<String>? = null
         //getAllResults
         val allResults = covidApi.getFullResults()
-//        Timber.d("#1 $allResults")
         val apiData = covidApi.getCountries("cases")
-//        Timber.d("#2 ${apiData[0].cases}")
-
         sharedPreference.saveAllCountriesResult(allResults)
-//        localDatabaseSource.insert(apiData)
-//        localDatabaseSource.subscribeToCountry("Egypt")
-//        localDatabaseSource.subscribeToCountry("USA")
-//        localDatabaseSource.subscribeToCountry("Italy")
         val subscribedData = localDatabaseSource.getSubscribedCountries()
-
-//        Timber.d("#3 #4 ${subscribedData[0].cases}")
-//        subscribedData[0].cases = 1000
-//        subscribedData[1].cases = 500
-
         //update ApiData
         if(subscribedData.isNotEmpty()) {
             updateApiList(apiData, subscribedData)
@@ -44,7 +34,6 @@ class DataRepository @Inject constructor(
             }
         }
         localDatabaseSource.insert(apiData)
-//        Timber.d("#7 save to database")
         return@withContext changesList
     }
 

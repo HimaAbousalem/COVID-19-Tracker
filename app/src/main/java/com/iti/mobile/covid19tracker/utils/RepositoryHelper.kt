@@ -22,11 +22,5 @@ fun calculateTheDifferences(subscribedData: List<Country>, apiData: List<Country
                 }
             }
     }
-
-//    if(changes.isNotEmpty()){
-//        Timber.d("changes is : ${changes[0]}")
-//        Timber.d("changes is : ${changes.size}")
-//    }
-
     return changes
 }

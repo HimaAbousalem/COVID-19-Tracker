@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -19,6 +20,8 @@ import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
+import com.iti.mobile.covid19tracker.extension.hideKeyboard
+import com.iti.mobile.covid19tracker.extension.toast
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.features.subscriptions.SubscriptionsAdapter
@@ -105,12 +108,14 @@ class AllCountriesFragment : Fragment(), Clickable {
 //        }
 
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
-           // Timber.d(Thread.currentThread().name)
-            countriesList = data
-            //displayList.addAll(data)
-           if(isSearchStarted)
-               displayCountries(countriesList)
-
+            if(data.isNotEmpty()){
+                countriesList = data
+                if(isSearchStarted)
+                    displayCountries(countriesList)
+            }else{
+                //TODO Show NO Internet UI
+                activity?.toast("No Internet!")
+            }
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
            // Timber.d("Observer : $it")
@@ -165,11 +170,12 @@ class AllCountriesFragment : Fragment(), Clickable {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 liveData.value = query
+                hideKeyboard()
                 isSearchStarted = false
                 return false
             }
         })
-
+        searchView.setOnCloseListener { hideKeyboard(); true }
         return liveData
     }
 
