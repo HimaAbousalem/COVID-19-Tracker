@@ -9,7 +9,7 @@ fun setupNotification (binding: SettingsViewBinding , context: Context) {
     var buttonTime : Long = 0
     binding.switchGroup.isEnabled = false
     binding.toggleButtonGroup.visibility = View.VISIBLE
-    binding.toggleButtonGroup.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+    binding.toggleButtonGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
 
         if(binding.button1.id == checkedId){
           if (isChecked)
