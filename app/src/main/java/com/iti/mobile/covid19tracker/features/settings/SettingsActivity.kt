@@ -11,7 +11,7 @@ import com.iti.mobile.covid19tracker.databinding.ActivitySettingsBinding
                binding.showNotificationSetting.visibility = View.GONE
            } else {
                binding.showNotificationSetting.visibility = View.VISIBLE
-               binding.switchGroup.setOnCheckedChangeListener { buttonView, isChecked ->
+               binding.switchGroup.setOnCheckedChangeListener { _, isChecked ->
                    if (isChecked) {
                        binding.toggleButtonGroup.visibility = View.VISIBLE
                    } else {
@@ -21,7 +21,7 @@ import com.iti.mobile.covid19tracker.databinding.ActivitySettingsBinding
            }
        }
        binding.toggleButtonGroup.isSingleSelection = true
-       binding.toggleButtonGroup.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+       binding.toggleButtonGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             if(checkedId == 0){
                print("0")
             }else if (checkedId == 1){

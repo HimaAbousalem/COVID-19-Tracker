@@ -15,10 +15,8 @@ import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.utils.Clickable
-import com.iti.mobile.covid19tracker.utils.DrawCountryHistoryData
 import com.iti.mobile.covid19tracker.utils.SUBSCRIBED
 import com.iti.mobile.covid19tracker.utils.UN_SUBSCRIBED
-import kotlinx.android.synthetic.main.details_country_card_layout.view.*
 
 
 class CountriesAdapter(countries: List<Country>, val listener: Clickable) :

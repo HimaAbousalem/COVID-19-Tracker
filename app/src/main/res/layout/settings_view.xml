@@ -14,15 +14,15 @@
         android:layout_height="wrap_content"
         android:text="Settings"
         android:textStyle="bold"
-        android:textSize="20dp"
+        android:textSize="24dp"
         android:textAlignment="center"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/notificationOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:text="Notifications"
-        android:textSize="18dp"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"/>
     <LinearLayout
         android:id="@+id/showNotificationSetting"
         android:layout_width="match_parent"
@@ -57,10 +57,10 @@
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButtonGroup"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             app:checkedButton="@id/button1">
 
             <Button

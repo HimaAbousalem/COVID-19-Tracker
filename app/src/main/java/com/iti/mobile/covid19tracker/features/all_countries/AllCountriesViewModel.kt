@@ -25,8 +25,6 @@ class AllCountriesViewModel @Inject constructor(private val dataRepository: Data
     suspend fun updateCountry(country: Country){
         dataRepository.updateCountrySubscription(country)
     }
-    suspend fun getCountryHistory (country:String) : CountryHistory {
-        return dataRepository.getCountryHistory(country)
-    }
+
 
 }

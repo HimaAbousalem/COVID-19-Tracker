@@ -37,19 +37,19 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
         setContentView(binding.root)
         (application as Covid19App).appComponent.controllerComponent(ControllerModule(this)).inject(this)
         setup()
-        getData()
+        //getData()
         val lineDataSet = LineDataSet(datavalues(),"Cases")
         val lineDataSet2 = LineDataSet(datavalues2(),"Deaths")
         lineDataSet.setCircleColor(ContextCompat.getColor(baseContext, R.color.white))
-        lineDataSet.setColor(ContextCompat.getColor(baseContext, R.color.colorPrimary))
+        lineDataSet.color = ContextCompat.getColor(baseContext, R.color.colorPrimary)
         lineDataSet2.setDrawFilled(true)
-        lineDataSet2.setFillFormatter(FillFormatter { dataSet, dataProvider ->
+        lineDataSet2.fillFormatter = FillFormatter { _, _ ->
             return@FillFormatter binding.chart2.axisLeft.axisMinimum
-        })
+        }
         lineDataSet.setDrawFilled(true)
-        lineDataSet.setFillFormatter(FillFormatter { dataSet, dataProvider ->
+        lineDataSet.fillFormatter = FillFormatter { _, _ ->
             return@FillFormatter binding.chart2.axisLeft.axisMinimum
-        })
+        }
         lineDataSet.fillAlpha = 1
         lineDataSet2.fillAlpha = 3
         if (Utils.getSDKInt() >= 18) {
@@ -139,12 +139,12 @@ class graph_test : OnChartValueSelectedListener, AppCompatActivity()  {
             yAxis.setAxisMinValue(-50f)
 
     }
-    fun getData (){
-         CoroutineScope(Dispatchers.IO).launch {
-             dataRepository.getCountryHistory("Egypt").timeLine
-                 ?.cases?.forEach {
-                     Log.i ("req",it.toString())
-                 }
-         }
-    }
+//    fun getData (){
+//         CoroutineScope(Dispatchers.IO).launch {
+//             dataRepository.getCountryHistory("Egypt").timeLine
+//                 ?.cases?.forEach {
+//                     Log.i ("req",it.toString())
+//                 }
+//         }
+//    }
 }

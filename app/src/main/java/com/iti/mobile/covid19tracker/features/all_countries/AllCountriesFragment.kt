@@ -1,11 +1,8 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.app.Dialog
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -17,25 +14,20 @@ import androidx.recyclerview.widget.MergeAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
-import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.extension.hideKeyboard
 import com.iti.mobile.covid19tracker.extension.toast
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
-import com.iti.mobile.covid19tracker.features.subscriptions.SubscriptionsAdapter
 
 import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
-import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.utils.Clickable
-import com.iti.mobile.covid19tracker.utils.DrawCountryHistoryData
 import com.iti.mobile.covid19tracker.utils.setupNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class AllCountriesFragment : Fragment(), Clickable {
@@ -65,9 +57,6 @@ class AllCountriesFragment : Fragment(), Clickable {
             )
         ).inject(this)
         viewModel = ViewModelProvider(this, viewmodelFactory).get(AllCountriesViewModel::class.java)
-//        WorkManager.getInstance(requireActivity()).enqueue(
-//            OneTimeWorkRequestBuilder<SyncWork>().build()
-//        )
         displayList = mutableListOf()
         countriesList = listOf()
         setupRecycleView()
@@ -102,11 +91,6 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
 
     private fun fetchData() {
-        //TODO we need to check if this is the firstTime or not + check the internet!
-//        CoroutineScope(Dispatchers.IO).launch {
-//            viewModel.updateDatabase()
-//        }
-
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
             if(data.isNotEmpty()){
                 countriesList = data
@@ -118,7 +102,6 @@ class AllCountriesFragment : Fragment(), Clickable {
             }
         })
         viewModel.allCountriesResult.observe(requireActivity(), Observer {
-           // Timber.d("Observer : $it")
             allResults = it
             allResultsAdapter.allResults = it
             mergeAdapter.adapters.first().notifyDataSetChanged()
@@ -138,12 +121,10 @@ class AllCountriesFragment : Fragment(), Clickable {
 
     fun displayCountries(countriesList: List<Country>) {
         countriesAdapter.countries = countriesList.toMutableList()
-       // countriesAdapter.submitList(countriesList)
         mergeAdapter.adapters.last().notifyDataSetChanged()
         if (countriesAdapter.itemCount == 0) {
             binding.noDataLayout.noDataTextView.visibility = View.VISIBLE
             binding.noDataLayout.noDataTextView.text = "nooo"
-//                Resources.getSystem().getText(R.string.no_internet)
             binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
             binding.noDataLayout.retryAgainButton.setOnClickListener {
                 //TODO:- check internet and call worker

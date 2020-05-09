@@ -52,4 +52,8 @@ class DataRepository @Inject constructor(
     suspend fun getCountryHistory (country:String) : CountryHistory {
        return covidApi.getCountryHistory(country)
     }
+
+    suspend fun getAllHistory () : CountryHistoryDetails {
+        return covidApi.getAllHistory()
+    }
 }

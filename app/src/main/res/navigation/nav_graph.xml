@@ -16,7 +16,7 @@
         tools:layout="@layout/fragment_subscriptions" />
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.iti.mobile.covid19tracker.features.mapView.MapFragment"
+        android:name="com.iti.mobile.covid19tracker.features.statisticsView.StatisticsFragment"
         android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_statistics" />
 </navigation>
