@@ -1,11 +1,15 @@
 package com.iti.mobile.covid19tracker.features.base
 
 import android.app.Application
+import android.content.Context
 import androidx.work.*
 import com.iti.mobile.covid19tracker.BuildConfig
 import com.iti.mobile.covid19tracker.dagger.component.CovidAppComponent
 import com.iti.mobile.covid19tracker.dagger.component.DaggerCovidAppComponent
 import com.iti.mobile.covid19tracker.dagger.modules.app.ApplicationModule
+import com.iti.mobile.covid19tracker.utils.APP_REQUEST
+import com.iti.mobile.covid19tracker.utils.DEFAULT_UPDATE_TIME
+import com.iti.mobile.covid19tracker.utils.SETTINGS_REQUEST
 import com.iti.mobile.covid19tracker.work_manager.SyncWork
 import com.iti.mobile.covid19tracker.utils.WORK_MANAGER_KEY
 import timber.log.Timber
@@ -29,18 +33,25 @@ class Covid19App : Application(){
         WorkManager.initialize(this, Configuration.Builder()
                 .setWorkerFactory(myWorkerFactory)
                 .build())
-        scheduleWork()
+        scheduleWork(DEFAULT_UPDATE_TIME,this, APP_REQUEST)
     }
 
-    private fun scheduleWork() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        val request = PeriodicWorkRequestBuilder<SyncWork>(15, TimeUnit.MINUTES)
-            .setBackoffCriteria(BackoffPolicy.LINEAR, 2, TimeUnit.MINUTES)
-            .setConstraints(constraints)
-            .build()
-       WorkManager.getInstance(this)
-            .enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
-    }
+
+}
+fun scheduleWork(timeInHour : Long , context: Context, requestType : Int) {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+    val request = PeriodicWorkRequestBuilder<SyncWork>(timeInHour, TimeUnit.HOURS)
+        .setBackoffCriteria(BackoffPolicy.LINEAR, 2, TimeUnit.MINUTES)
+        .setConstraints(constraints)
+        .build()
+  if (requestType == APP_REQUEST) {
+      WorkManager.getInstance(context)
+          .enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.KEEP, request)
+  }else if (requestType == SETTINGS_REQUEST){
+      WorkManager.getInstance(context)
+          .enqueueUniquePeriodicWork(WORK_MANAGER_KEY, ExistingPeriodicWorkPolicy.REPLACE, request)
+  }
+
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentSubscriptionsBinding
@@ -43,9 +44,12 @@ class SubscriptionsFragment : Fragment(), Clickable {
 
         viewModel.subscribedCountriesData.observe(requireActivity(), Observer {subscription->
             if(subscription.isEmpty()){
-                Timber.d("No Subscriptions")
+                showNoDataLayout()
                 adapter?.submitList(subscription)
             }else {
+                binding.subscriptionRecycler.visibility = View.VISIBLE
+                binding.noDataLayout.noDataLayout.visibility = View.GONE
+                binding.noDataLayout.lottieCovid.cancelAnimation()
                 adapter?.submitList(subscription)
             }
         })
@@ -56,14 +60,19 @@ class SubscriptionsFragment : Fragment(), Clickable {
         binding.subscriptionRecycler.layoutManager = LinearLayoutManager(requireActivity())
         adapter = SubscriptionsAdapter(this)
         binding.subscriptionRecycler.adapter = adapter
+    }
 
+    fun showNoDataLayout (){
+        binding.subscriptionRecycler.visibility = View.GONE
+        binding.noDataLayout.lottieCovid.setAnimation(R.raw.nonotifications)
+        binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
     }
 
     private fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = binding.appToolBar.appToolBar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Subscription"
+        (activity as AppCompatActivity).supportActionBar?.title = "Subscriptions"
     }
 
     override fun onItemClick(country: Country) {

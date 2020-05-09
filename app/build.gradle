@@ -84,6 +84,8 @@ dependencies {
 
     //charts
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+
+    implementation "com.airbnb.android:lottie:$lottieVersion"
     //Tests
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

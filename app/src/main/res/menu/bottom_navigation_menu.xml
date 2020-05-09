@@ -4,14 +4,14 @@
     <item
         android:id="@+id/allCountriesFragment"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_globe"
+        android:icon="@drawable/ic_healthcare_and_medical"
         android:title="@string/countries"
         app:showAsAction="always"/>
     <item
         android:id="@+id/mapFragment"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_healthcare_and_medical"
-        android:title="@string/map"
+        android:icon="@drawable/ic_business"
+        android:title="@string/statistics"
         app:showAsAction="always"/>
     <item
         android:id="@+id/subscriptionsFragment"

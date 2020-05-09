@@ -26,5 +26,11 @@ const val WORK_MANAGER_KEY = "SyncWork"
 const val CHANNEL_NAME = "covid19"
 const val CHANNEL_ID = "10000"
 const val NOTIFICATION_ID = 5
+const val DEFAULT_UPDATE_TIME : Long = 1
+const val APP_REQUEST = 0
+const val SETTINGS_REQUEST = 1
 
-
+//settings
+const val UPDATE_ONE_HOUR : Long= 1
+const val UPDATE_TWO_HOUR : Long = 2
+const val UPDATE_DAY : Long = 24

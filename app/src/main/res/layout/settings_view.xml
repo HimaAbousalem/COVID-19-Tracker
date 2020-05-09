@@ -51,6 +51,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="50dp"
+                android:checked="true"
 
                 />
         </LinearLayout>
@@ -60,33 +61,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
-            app:checkedButton="@id/button1">
+            android:visibility="visible"
+            android:weightSum="3"
+            app:singleSelection="true">
 
             <Button
                 android:id="@+id/button1"
                 android:backgroundTint="@color/white"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="One hour"
+                android:text="1 Hour"
                 android:textSize="14dp"/>
 
             <Button
                 android:backgroundTint="@color/white"
                 android:id="@+id/button2"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textSize="14dp"
-                android:text="Two hours" />
+                android:text="2 Hours" />
 
             <Button
                 android:backgroundTint="@color/white"
                 android:id="@+id/button3"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textSize="14dp"
                 android:text="24 Hour"
 
