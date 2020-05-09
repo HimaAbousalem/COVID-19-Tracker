@@ -1,6 +1,5 @@
 package com.iti.mobile.covid19tracker.model.entities
 
-import java.lang.Exception
 
 sealed class ResultState<out T>
 data class LoadingState<T>(var loading: Boolean):ResultState<T>()

@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation (){
-        binding.bottomNavigation.itemIconTintList = null;
+//        binding.bottomNavigation.itemIconTintList = null
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
          NavigationUI.setupWithNavController(binding.bottomNavigation,navController)
     }

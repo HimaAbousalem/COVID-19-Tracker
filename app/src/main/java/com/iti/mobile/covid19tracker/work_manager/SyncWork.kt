@@ -18,23 +18,28 @@ class SyncWork @Inject constructor(
      workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        var job = repo.updateDataBase()
-        Timber.d("#8 You have the data + $job")
-        if (job != null) {
-            if(job?.isNotEmpty()!!) {
-                var notificationText = "There is a changes happens in ("
-                for (data in job.indices) {
-                    notificationText += if (data == 0)
-                        job[data]
-                    else
-                        ", ${job[data]}"
+        try {
+            var job = repo.updateDataBase()
+            Timber.d("#8 You have the data + $job")
+            if (job != null) {
+                if (job?.isNotEmpty()!!) {
+                    var notificationText = "There is a changes happens in ("
+                    for (data in job.indices) {
+                        notificationText += if (data == 0)
+                            job[data]
+                        else
+                            ", ${job[data]}"
 
+                    }
+                    notificationText += ")"
+                    makeStatusNotification(applicationContext, notificationText)
                 }
-                notificationText += ")"
-                makeStatusNotification(applicationContext, notificationText)
             }
+            Result.success()
+        }catch(e: Exception){
+            Timber.d("Error: ${e.message}")
+            Result.failure()
         }
-        Result.success()
     }
 
 
