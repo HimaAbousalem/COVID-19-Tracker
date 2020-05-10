@@ -17,7 +17,7 @@
         android:visibility="gone">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie_covid"
+            android:id="@+id/no_data_lottie_covid"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="5dp"
