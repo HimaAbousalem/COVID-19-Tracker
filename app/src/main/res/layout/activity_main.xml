@@ -41,7 +41,7 @@
         android:layout_gravity="bottom"
         android:background="@color/white"
         android:foreground="?attr/selectableItemBackground"
-        app:itemRippleColor="#673AB7"
+        app:itemRippleColor="@color/colorPrimaryDark"
         app:itemIconTint="@drawable/bottom_nav_selector"
         app:itemTextColor="@drawable/bottom_nav_selector"
         app:layout_constraintBottom_toBottomOf="parent"

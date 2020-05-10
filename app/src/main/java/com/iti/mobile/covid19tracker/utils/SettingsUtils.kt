@@ -3,9 +3,11 @@ package com.iti.mobile.covid19tracker.utils
 import android.app.Dialog
 import android.content.Context
 import android.view.View
+import android.widget.Toast
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.features.base.scheduleWork
 import timber.log.Timber
+import com.iti.mobile.covid19tracker.extension.toast
 
 fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: Dialog) {
     var buttonTime : Long = 0
@@ -30,5 +32,6 @@ fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: 
        if (buttonTime != 0L)
             scheduleWork(buttonTime,context, SETTINGS_REQUEST)
         dialog.dismiss()
+        context.toast("You will be notified after ${buttonTime}-Hour")
     }
 }

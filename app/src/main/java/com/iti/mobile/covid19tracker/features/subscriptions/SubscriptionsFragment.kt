@@ -49,7 +49,7 @@ class SubscriptionsFragment : Fragment(), Clickable {
             }else {
                 binding.subscriptionRecycler.visibility = View.VISIBLE
                 binding.noDataLayout.noDataLayout.visibility = View.GONE
-                binding.noDataLayout.lottieCovid.cancelAnimation()
+                binding.noDataLayout.noDataLottieCovid.cancelAnimation()
                 adapter?.submitList(subscription)
             }
         })
@@ -64,7 +64,7 @@ class SubscriptionsFragment : Fragment(), Clickable {
 
     fun showNoDataLayout (){
         binding.subscriptionRecycler.visibility = View.GONE
-        binding.noDataLayout.lottieCovid.setAnimation(R.raw.nonotifications)
+        binding.noDataLayout.noDataLottieCovid.setAnimation(R.raw.nonotifications)
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
     }
 

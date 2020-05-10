@@ -1,9 +1,9 @@
 package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.app.Dialog
-import android.net.Network
 import android.os.Bundle
 import android.view.*
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -12,17 +12,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.MergeAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.extension.hideKeyboard
-import com.iti.mobile.covid19tracker.extension.toast
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
-
-import com.iti.mobile.covid19tracker.model.entities.AllResults
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.setupNotification
@@ -31,21 +27,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 class AllCountriesFragment : Fragment(), Clickable {
     @Inject
     lateinit var viewmodelFactory: ViewModelProvidersFactory
     lateinit var viewModel: AllCountriesViewModel
     private lateinit var binding: FragmentAllCountriesBinding
     lateinit var countriesAdapter: CountriesAdapter
-    private lateinit var allResultsAdapter: AllResultsAdapter
+   // private lateinit var allResultsAdapter: AllResultsAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var settingsViewBinding: SettingsViewBinding
     private lateinit var dialog: Dialog
     lateinit var displayList: MutableList<Country>
     lateinit var countriesList: List<Country>
-    lateinit var allResults: AllResults
+   // lateinit var allResults: AllResults
     lateinit var mergeAdapter: MergeAdapter
-    var isSearchStarted = true
+    var isSearchFinished = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,21 +70,18 @@ class AllCountriesFragment : Fragment(), Clickable {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "All Affected Countries"
     }
-
-
     private fun setupRecycleView() {
         displayList = mutableListOf()
         countriesList = listOf()
-        allResults = AllResults()
+        //allResults = AllResults()
         layoutManager = LinearLayoutManager(activity)
         binding.allCountriesRecyclerview.setHasFixedSize(true)
         binding.allCountriesRecyclerview.layoutManager = layoutManager
-        //countriesAdapter = SubscriptionsAdapter( this)
         countriesAdapter = CountriesAdapter(countriesList,this)
-        allResultsAdapter = AllResultsAdapter(allResults)
-        allResultsAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        mergeAdapter = MergeAdapter(allResultsAdapter, countriesAdapter)
+       // allResultsAdapter = AllResultsAdapter(allResults)
+       // allResultsAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+       // mergeAdapter = MergeAdapter(allResultsAdapter, countriesAdapter)
+        mergeAdapter = MergeAdapter(countriesAdapter)
         binding.allCountriesRecyclerview.adapter = mergeAdapter
     }
 
@@ -95,17 +89,17 @@ class AllCountriesFragment : Fragment(), Clickable {
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
             if(data.isNotEmpty()){
                 countriesList = data
-                if(isSearchStarted)
+                if(isSearchFinished)
                     displayCountries(countriesList)
             }else{
                 showNoDataLayout()
             }
         })
-        viewModel.allCountriesResult.observe(requireActivity(), Observer {
-            allResults = it
-            allResultsAdapter.allResults = it
-            mergeAdapter.adapters.first().notifyDataSetChanged()
-        })
+//        viewModel.allCountriesResult.observe(requireActivity(), Observer {
+//            allResults = it
+//            allResultsAdapter.allResults = it
+//            mergeAdapter.adapters.first().notifyDataSetChanged()
+//        })
 
     }
     fun setupSettingView (){
@@ -147,7 +141,7 @@ class AllCountriesFragment : Fragment(), Clickable {
                 val text = newText.toString()
                 if (text.matches(Regex("[a-z A-Z]*"))) {
                     liveData.value = text.trim()
-                    isSearchStarted = false
+                    isSearchFinished = false
                 }
                 return false
             }
@@ -155,11 +149,23 @@ class AllCountriesFragment : Fragment(), Clickable {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 liveData.value = query
                 hideKeyboard()
-                isSearchStarted = false
+                isSearchFinished = false
                 return false
             }
         })
-        searchView.setOnCloseListener { hideKeyboard(); true }
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                hideKeyboard();
+                binding.lottieCovid.visibility = View.VISIBLE
+                binding.viewColor.visibility = View.VISIBLE
+                return true
+            }
+
+        })
+        searchView.setOnCloseListener{
+            hideKeyboard();
+            true
+        }
         return liveData
     }
 
@@ -176,6 +182,20 @@ class AllCountriesFragment : Fragment(), Clickable {
         }
         if (item.itemId == R.id.app_bar_search) {
             val searchView = item.actionView as SearchView
+            item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener{
+                override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                    binding.lottieCovid.visibility = View.GONE
+                    binding.viewColor.visibility = View.GONE
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                    binding.lottieCovid.visibility = View.VISIBLE
+                    binding.viewColor.visibility = View.VISIBLE
+                   return true
+                }
+
+            })
             fromView(searchView).observe(this, Observer { word ->
                 if (word.isNotEmpty()) {
                     displayList.clear()
@@ -187,7 +207,7 @@ class AllCountriesFragment : Fragment(), Clickable {
                     displayCountries(displayList)
                 } else {
                     displayCountries(countriesList)
-                    isSearchStarted = true
+                    isSearchFinished = true
                 }
             })
         }
@@ -204,3 +224,4 @@ class AllCountriesFragment : Fragment(), Clickable {
 
 
 }
+
