@@ -40,17 +40,6 @@
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/retry_again_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/all_margin"
-            android:text="@string/retry"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/white"
-            android:background="@android:color/darker_gray"
-            android:visibility="gone" />
     </LinearLayout>
 
 

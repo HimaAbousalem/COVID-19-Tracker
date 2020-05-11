@@ -23,11 +23,12 @@ import javax.inject.Inject
  * A simple [Fragment] subclass.
  */
 class StatisticsFragment : Fragment() {
-lateinit var binding: FragmentStatisticsBinding
+    lateinit var binding: FragmentStatisticsBinding
+
     @Inject
     lateinit var viewmodelFactory: ViewModelProvidersFactory
     lateinit var viewModel: StatisticsViewModel
-    lateinit  var countryHistoryDeferred: Deferred<CountryHistoryDetails>
+    lateinit var countryHistoryDeferred: Deferred<CountryHistoryDetails>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,47 +43,48 @@ lateinit var binding: FragmentStatisticsBinding
         viewModel = ViewModelProvider(this, viewmodelFactory).get(StatisticsViewModel::class.java)
 
         viewModel.getAllHistory().observe(requireActivity(), Observer {
-            when(it){
-                is LoadingState-> {
+            when (it) {
+                is LoadingState -> {
                     if (it.loading) {
-                       // Timber.d("Loading")
+                        // Timber.d("Loading")
                         setupNoData("Loading data .....", 1)
                     } else {
                         Timber.d("Finish Loading")
                     }
                 }
-                    is SuccessState->{
-                        context?.let { context ->
-                            drawCountryHistoryData(
-                                binding,
-                                it.data,
-                                context
-                            )
-                        }
+                is SuccessState -> {
+                    context?.let { context ->
+                        drawCountryHistoryData(
+                            binding,
+                            it.data,
+                            context
+                        )
                     }
-
-
-                    is ErrorState -> {
-                        Timber.d(it.exception)
-                        setupNoData("No Internet Connection is available!", 0)
-                    }
+                }
+                is ErrorState -> {
+                    Timber.d(it.exception)
+                    setupNoData("No Internet Connection is available!", 0)
+                }
 
             }
+        })
+        viewModel.allCountriesResult.observe(requireActivity(), Observer {
+            binding.confirmedNumber.text = "${it.cases}"
+            binding.recoveredNumber.text = "${it.recovered}"
+            binding.deathNumber.text = "${it.deaths}"
+            binding.todayCasesNumber.text = "${it.todayCases}"
+            binding.todayDeathsNumber.text = "${it.todayDeaths}"
+            binding.criticalNumber.text = "${it.critical}"
         })
         return binding.root
     }
 
-    fun setupNoData (text:String,status:Int){
+    private fun setupNoData(text: String, status: Int) {
         binding.chart.visibility = View.GONE
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = text
-       if (status == 0){
-           binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
-           binding.noDataLayout.retryAgainButton.setOnClickListener {
-               //TODO : chack internet
-           }
-       }
-
-
+        if (status == 0) {
+            binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
+        }
     }
 }

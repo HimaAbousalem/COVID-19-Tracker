@@ -10,9 +10,9 @@
     <string name="countries">Countries</string>
     <string name="settings">Settings</string>
     <string name="confirmed">Confirmed</string>
-    <string name="recoverd">Recoverd</string>
+    <string name="recoverd">Recovered</string>
     <string name="deaths">Deaths</string>
-    <string name="world_wide">World wide</string>
+    <string name="world_wide">Worldwide</string>
     <string name="today_cases">Today Cases</string>
     <string name="today_deaths">Today Deaths</string>
     <string name="critical">Critical</string>

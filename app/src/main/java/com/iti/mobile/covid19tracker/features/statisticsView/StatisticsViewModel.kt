@@ -21,4 +21,8 @@ class StatisticsViewModel  @Inject constructor(private val dataRepository: DataR
             emit(LoadingState<CountryHistoryDetails>(loading = false))
         }
     }
+
+    val allCountriesResult: LiveData<AllResults> = liveData {
+        emitSource(dataRepository.getAllResultsSharedPreference())
+    }
 }

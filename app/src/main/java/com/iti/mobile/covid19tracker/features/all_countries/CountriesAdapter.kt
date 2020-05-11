@@ -113,4 +113,9 @@ class CountriesAdapter(countries: List<Country>, val listener: Clickable) :
         return countries.size
     }
 
+    fun setData(countriesList: List<Country>) {
+        countries = countriesList.toMutableList()
+        notifyDataSetChanged()
+    }
+
 }
