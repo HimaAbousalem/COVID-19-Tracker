@@ -62,7 +62,7 @@ class AllCountriesFragment : Fragment(), Clickable {
         filterByContinent()
         return binding.root
     }
-
+     //setup views
     private fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = binding.appToolBar.appToolBar
@@ -79,7 +79,29 @@ class AllCountriesFragment : Fragment(), Clickable {
         binding.allCountriesRecyclerview.adapter = mergeAdapter
 
     }
+    private fun setupSettingView (){
+        dialog = Dialog( this.requireContext() )
+        dialog.setTitle("Settings")
+        settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
+        dialog.setContentView(settingsViewBinding.root)
+        setupNotification(settingsViewBinding,requireActivity(),dialog)
+        settingsViewBinding.cancelSetting.setOnClickListener {
+            dialog.dismiss()
+        }
 
+    }
+    private fun setupSwipeToRefresh (){
+        binding.swiperefreshItems.setOnRefreshListener {
+            //TODO:- update db
+            val handler = Handler()
+            handler.postDelayed({
+                if ( binding.swiperefreshItems.isRefreshing()) {
+                    binding.swiperefreshItems.setRefreshing(false)
+                }
+            }, 1000)
+        }
+    }
+    //show data
     private fun fetchData() {
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
             if(data.isNotEmpty()){
@@ -92,18 +114,6 @@ class AllCountriesFragment : Fragment(), Clickable {
         })
 
     }
-    private fun setupSettingView (){
-        dialog = Dialog( this.requireContext() )
-        dialog.setTitle("Settings")
-        settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
-        dialog.setContentView(settingsViewBinding.root)
-        setupNotification(settingsViewBinding,requireActivity(),dialog)
-        settingsViewBinding.cancelSetting.setOnClickListener {
-            dialog.dismiss()
-        }
-
-    }
-
     private fun displayCountries(countriesList: List<Country>) {
         binding.allCountriesRecyclerview.visibility = View.VISIBLE
         binding.noDataLayout.noDataLayout.visibility = View.GONE
@@ -111,23 +121,14 @@ class AllCountriesFragment : Fragment(), Clickable {
         mergeAdapter.adapters.last().notifyDataSetChanged()
         mergeAdapter.adapters.last().notifyDataSetChanged()
     }
-
-    fun showNoDataLayout (){
+    private fun showNoDataLayout (){
         binding.allCountriesRecyclerview.visibility = View.GONE
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
     }
-    fun setupSwipeToRefresh (){
-        binding.swiperefreshItems.setOnRefreshListener {
-            val handler = Handler()
-            handler.postDelayed({
-                if ( binding.swiperefreshItems.isRefreshing()) {
-                    binding.swiperefreshItems.setRefreshing(false)
-                }
-            }, 1000)
-        }
-    }
-    fun filterByContinent (){
+
+    //Search on countries
+    private fun filterByContinent (){
         binding.filterGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             displayList.clear()
             if(binding.all.id == checkedId){
@@ -202,8 +203,6 @@ class AllCountriesFragment : Fragment(), Clickable {
             }
         }
     }
-
-    //Search on countries
     private fun fromView(searchView: SearchView): MutableLiveData<String> {
         var liveData = MutableLiveData<String>()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -232,19 +231,14 @@ class AllCountriesFragment : Fragment(), Clickable {
             }
 
         })
-        searchView.setOnCloseListener{
-            hideKeyboard();
-            true
-        }
         return liveData
     }
 
-
+    //app bar
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
             dialog.show()
