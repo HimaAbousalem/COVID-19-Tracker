@@ -107,7 +107,6 @@ class AllCountriesFragment : Fragment(), Clickable {
         binding.noDataLayout.noDataLayout.visibility = View.GONE
         countriesAdapter.countries = countriesList.toMutableList()
         mergeAdapter.adapters.last().notifyDataSetChanged()
-        mergeAdapter.adapters.last().notifyDataSetChanged()
     }
 
     fun showNoDataLayout (){
@@ -136,17 +135,14 @@ class AllCountriesFragment : Fragment(), Clickable {
                 return false
             }
         })
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                hideKeyboard();
-                binding.lottieCovid.visibility = View.VISIBLE
-                binding.viewColor.visibility = View.VISIBLE
-                return true
-            }
-
-        })
+        searchView.setOnCloseListener {
+            hideKeyboard()
+            binding.lottieCovid.visibility = View.VISIBLE
+            binding.viewColor.visibility = View.VISIBLE
+            true
+        }
         searchView.setOnCloseListener{
-            hideKeyboard();
+            hideKeyboard()
             true
         }
         return liveData
