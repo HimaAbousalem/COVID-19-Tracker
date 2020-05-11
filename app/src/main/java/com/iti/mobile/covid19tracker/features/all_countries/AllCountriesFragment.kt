@@ -39,7 +39,8 @@ class AllCountriesFragment : Fragment(), Clickable {
     lateinit var displayList: MutableList<Country>
     lateinit var countriesList: List<Country>
     lateinit var mergeAdapter: MergeAdapter
-    var isSearchFinished = true
+    var isUserNotInSearch = true
+    var isFirstLoading = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,12 +57,14 @@ class AllCountriesFragment : Fragment(), Clickable {
         countriesList = listOf()
         setupRecycleView()
         setupSettingView()
+        isFirstLoading = true
         fetchData()
         setupToolbar()
         setupSwipeToRefresh()
         filterByContinent()
         return binding.root
     }
+
      //setup views
     private fun setupToolbar() {
         setHasOptionsMenu(true)
@@ -105,9 +108,11 @@ class AllCountriesFragment : Fragment(), Clickable {
     private fun fetchData() {
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
             if(data.isNotEmpty()){
-                countriesList = data
-                if(isSearchFinished)
+                if(isFirstLoading){
+                    countriesList = data
+                    isFirstLoading = false
                     displayCountries(countriesList)
+                }
             }else{
                 showNoDataLayout()
             }
@@ -143,8 +148,8 @@ class AllCountriesFragment : Fragment(), Clickable {
                         if (it.continent.equals("Africa")) {
                             displayList.add(it)
                         }
-                        displayCountries(displayList)
                     }
+                    displayCountries(displayList)
                 }
             }
             if (binding.asia.id == checkedId){
@@ -153,8 +158,8 @@ class AllCountriesFragment : Fragment(), Clickable {
                         if (it.continent.equals("Asia")) {
                             displayList.add(it)
                         }
-                        displayCountries(displayList)
                     }
+                    displayCountries(displayList)
                 }
 
             }
@@ -164,8 +169,8 @@ class AllCountriesFragment : Fragment(), Clickable {
                         if (it.continent.equals("Australia/Oceania")) {
                             displayList.add(it)
                         }
-                        displayCountries(displayList)
                     }
+                    displayCountries(displayList)
                 }
 
             }
@@ -175,8 +180,8 @@ class AllCountriesFragment : Fragment(), Clickable {
                         if (it.continent.equals("North America")) {
                             displayList.add(it)
                         }
-                        displayCountries(displayList)
                     }
+                    displayCountries(displayList)
                 }
 
             }
@@ -186,8 +191,8 @@ class AllCountriesFragment : Fragment(), Clickable {
                         if (it.continent.equals("South America")) {
                             displayList.add(it)
                         }
-                        displayCountries(displayList)
                     }
+                    displayCountries(displayList)
                 }
 
             }
@@ -197,8 +202,8 @@ class AllCountriesFragment : Fragment(), Clickable {
                         if (it.continent.equals("Europe")) {
                             displayList.add(it)
                         }
-                        displayCountries(displayList)
                     }
+                    displayCountries(displayList)
                 }
             }
         }
@@ -210,7 +215,6 @@ class AllCountriesFragment : Fragment(), Clickable {
                 val text = newText.toString()
                 if (text.matches(Regex("[a-z A-Z]*"))) {
                     liveData.value = text.trim()
-                    isSearchFinished = false
                 }
                 return false
             }
@@ -218,7 +222,6 @@ class AllCountriesFragment : Fragment(), Clickable {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 liveData.value = query
                 hideKeyboard()
-                isSearchFinished = false
                 return false
             }
         })
@@ -250,13 +253,17 @@ class AllCountriesFragment : Fragment(), Clickable {
                 override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                     binding.lottieCovid.visibility = View.GONE
                     binding.viewColor.visibility = View.GONE
-                    binding.filterGroup.check(binding.all.id)
+                    binding.filterGroup.visibility = View.GONE
+                    binding.filterText.visibility = View.GONE
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                     binding.lottieCovid.visibility = View.VISIBLE
                     binding.viewColor.visibility = View.VISIBLE
+                    binding.filterGroup.visibility = View.VISIBLE
+                    binding.filterText.visibility = View.VISIBLE
+                    binding.filterGroup.check(binding.all.id)
                    return true
                 }
 
@@ -272,7 +279,6 @@ class AllCountriesFragment : Fragment(), Clickable {
                     displayCountries(displayList)
                 } else {
                     displayCountries(countriesList)
-                    isSearchFinished = true
                 }
             })
         }
@@ -286,6 +292,7 @@ class AllCountriesFragment : Fragment(), Clickable {
             viewModel.updateCountry(country)
         }
     }
+
 
 
 }
