@@ -122,7 +122,7 @@ fun setupView (binding: FragmentStatisticsBinding,lineData: LineData ,baseContex
     yAxis.textColor = ContextCompat.getColor(baseContext, R.color.colorPrimary)
     yAxis.axisLineColor = ContextCompat.getColor(baseContext, R.color.colorPrimary)
     // disable dual axis (only use LEFT axis)
-    binding.chart.getAxisRight().setEnabled(false)
+    binding.chart.axisRight.isEnabled = false
 
     // horizontal grid lines
     yAxis.enableGridDashedLine(10f, 20f, 2f)

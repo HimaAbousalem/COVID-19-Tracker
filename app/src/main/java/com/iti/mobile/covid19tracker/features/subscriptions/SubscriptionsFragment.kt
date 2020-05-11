@@ -1,9 +1,8 @@
 package com.iti.mobile.covid19tracker.features.subscriptions
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,11 +12,13 @@ import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.DetailsCountryCardLayoutBinding
 import com.iti.mobile.covid19tracker.databinding.FragmentSubscriptionsBinding
+import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 import com.iti.mobile.covid19tracker.utils.Clickable
+import com.iti.mobile.covid19tracker.utils.setupNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +34,10 @@ class SubscriptionsFragment : Fragment(), Clickable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvidersFactory
     lateinit var viewModel: SubscriptionsViewModel
+    private lateinit var dialog: Dialog
+    private lateinit var settingsViewBinding: SettingsViewBinding
     var adapter: SubscriptionsAdapter? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSubscriptionsBinding.inflate(inflater)
         (activity?.application as Covid19App).appComponent.controllerComponent(ControllerModule(activity as AppCompatActivity)).inject(this)
@@ -41,7 +45,7 @@ class SubscriptionsFragment : Fragment(), Clickable {
 
         setupRecycleView()
         setupToolbar()
-
+        setupSettingView()
         viewModel.subscribedCountriesData.observe(requireActivity(), Observer {subscription->
             if(subscription.isEmpty()){
                 showNoDataLayout()
@@ -81,6 +85,28 @@ class SubscriptionsFragment : Fragment(), Clickable {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateCountry(country)
         }
+    }
+    private fun setupSettingView (){
+        dialog = Dialog( this.requireContext() )
+        dialog.setTitle("Settings")
+        settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
+        dialog.setContentView(settingsViewBinding.root)
+        setupNotification(settingsViewBinding,requireActivity(),dialog)
+        settingsViewBinding.cancelSetting.setOnClickListener {
+            dialog.dismiss()
+        }
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.settings_menu, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settingsMenuItem2) {
+            dialog.show()
+            return true
+        }
+        return false
     }
 
 }

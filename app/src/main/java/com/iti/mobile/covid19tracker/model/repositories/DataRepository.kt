@@ -56,4 +56,21 @@ class DataRepository @Inject constructor(
     suspend fun getAllHistory () : CountryHistoryDetails {
         return covidApi.getAllHistory()
     }
+
+    suspend fun pullToRefreshLogic(): String = withContext(Dispatchers.IO){
+        try {
+            val allResults = covidApi.getFullResults()
+            val apiData = covidApi.getCountries("cases")
+            sharedPreference.saveAllCountriesResult(allResults)
+            val subscribedData = localDatabaseSource.getSubscribedCountries()
+            //update ApiData
+            if (subscribedData.isNotEmpty()) {
+                updateApiList(apiData, subscribedData)
+            }
+            localDatabaseSource.insert(apiData)
+            return@withContext "data updated"
+        }catch (e: Exception){
+            return@withContext "Something went wrong"
+        }
+    }
 }

@@ -25,7 +25,7 @@ class AllCountriesViewModel @Inject constructor(private val dataRepository: Data
     suspend fun updateCountry(country: Country){
         dataRepository.updateCountrySubscription(country)
     }
-
-
-
+    suspend fun pullToRefreshLogic(): String {
+        return dataRepository.pullToRefreshLogic()
+    }
 }

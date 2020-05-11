@@ -17,14 +17,13 @@ import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.extension.hideKeyboard
+import com.iti.mobile.covid19tracker.extension.toast
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.setupNotification
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -95,13 +94,15 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
     private fun setupSwipeToRefresh (){
         binding.swiperefreshItems.setOnRefreshListener {
-            //TODO:- update db
-            val handler = Handler()
-            handler.postDelayed({
+            CoroutineScope(Dispatchers.IO).launch {
+                var result= viewModel.pullToRefreshLogic()
+                withContext(Dispatchers.Main) {
+                    activity?.toast(result)
+                }
                 if ( binding.swiperefreshItems.isRefreshing) {
                     binding.swiperefreshItems.isRefreshing = false
                 }
-            }, 1000)
+            }
         }
     }
     //show data
