@@ -84,12 +84,7 @@ class StatisticsFragment : Fragment() {
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = text
         if (status == 0) {
-            binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
-            binding.noDataLayout.retryAgainButton.setOnClickListener {
-                //TODO : chack internet
-            }
+            binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
         }
-
-
     }
 }

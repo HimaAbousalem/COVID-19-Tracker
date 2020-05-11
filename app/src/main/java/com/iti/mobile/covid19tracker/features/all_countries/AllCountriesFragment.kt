@@ -38,6 +38,7 @@ class AllCountriesFragment : Fragment(), Clickable {
     private lateinit var dialog: Dialog
     lateinit var displayList: MutableList<Country>
     lateinit var countriesList: List<Country>
+    lateinit var mergeAdapter: MergeAdapter
     var isSearchFinished = true
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +73,8 @@ class AllCountriesFragment : Fragment(), Clickable {
         binding.allCountriesRecyclerview.setHasFixedSize(true)
         binding.allCountriesRecyclerview.layoutManager = LinearLayoutManager(activity)
         countriesAdapter = CountriesAdapter(countriesList,this)
-        binding.allCountriesRecyclerview.adapter = countriesAdapter
+        mergeAdapter = MergeAdapter(countriesAdapter)
+        binding.allCountriesRecyclerview.adapter = mergeAdapter
 
     }
 
@@ -103,17 +105,15 @@ class AllCountriesFragment : Fragment(), Clickable {
     private fun displayCountries(countriesList: List<Country>) {
         binding.allCountriesRecyclerview.visibility = View.VISIBLE
         binding.noDataLayout.noDataLayout.visibility = View.GONE
-        countriesAdapter.setData(countriesList)
+        countriesAdapter.countries = countriesList.toMutableList()
+        mergeAdapter.adapters.last().notifyDataSetChanged()
+        mergeAdapter.adapters.last().notifyDataSetChanged()
     }
 
-    private fun showNoDataLayout (){
+    fun showNoDataLayout (){
         binding.allCountriesRecyclerview.visibility = View.GONE
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
-        binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
-        binding.noDataLayout.retryAgainButton.setOnClickListener {
-            //TODO:- check internet
-        }
     }
 
     //Search on countries
@@ -136,12 +136,15 @@ class AllCountriesFragment : Fragment(), Clickable {
                 return false
             }
         })
-        searchView.setOnCloseListener {
-            hideKeyboard();
-            binding.lottieCovid.visibility = View.VISIBLE
-            binding.viewColor.visibility = View.VISIBLE
-            true
-        }
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                hideKeyboard();
+                binding.lottieCovid.visibility = View.VISIBLE
+                binding.viewColor.visibility = View.VISIBLE
+                return true
+            }
+
+        })
         searchView.setOnCloseListener{
             hideKeyboard();
             true
@@ -194,10 +197,14 @@ class AllCountriesFragment : Fragment(), Clickable {
         return super.onOptionsItemSelected(item)
     }
 
+
+
     override fun onItemClick(country: Country) {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateCountry(country)
         }
     }
+
+
 }
 
