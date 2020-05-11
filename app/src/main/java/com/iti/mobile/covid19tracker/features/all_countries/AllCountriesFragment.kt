@@ -2,8 +2,8 @@ package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -61,6 +61,8 @@ class AllCountriesFragment : Fragment(), Clickable {
         setupSettingView()
         fetchData()
         setupToolbar()
+        setupSwipeToRefresh()
+        filterByContinent()
         return binding.root
     }
 
@@ -132,6 +134,91 @@ class AllCountriesFragment : Fragment(), Clickable {
 
         }
     }
+    fun setupSwipeToRefresh (){
+        binding.swiperefreshItems.setOnRefreshListener {
+            val handler = Handler()
+            handler.postDelayed({
+                if ( binding.swiperefreshItems.isRefreshing()) {
+                    binding.swiperefreshItems.setRefreshing(false)
+                }
+            }, 1000)
+        }
+    }
+    fun filterByContinent (){
+        binding.filterGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            displayList.clear()
+            if(binding.all.id == checkedId){
+                if (isChecked){
+                    displayList.addAll(countriesList)
+                    displayCountries(displayList)
+                }
+            }
+            if(binding.africa.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Africa")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+            }
+            if (binding.asia.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Asia")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if(binding.aust.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Australia/Oceania")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if(binding.northA.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("North America")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if (binding.southA.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("South America")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if(binding.euro.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Europe")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+            }
+        }
+    }
 
     //Search on countries
     private fun fromView(searchView: SearchView): MutableLiveData<String> {
@@ -186,6 +273,7 @@ class AllCountriesFragment : Fragment(), Clickable {
                 override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                     binding.lottieCovid.visibility = View.GONE
                     binding.viewColor.visibility = View.GONE
+                    binding.filterGroup.check(binding.all.id)
                     return true
                 }
 
