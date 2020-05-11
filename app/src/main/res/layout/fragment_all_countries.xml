@@ -40,24 +40,115 @@
       app:lottie_autoPlay="true"
       app:lottie_loop="true"
       app:lottie_rawRes="@raw/doctors" />
+  <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/filter_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@+id/lottie_covid"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:text="Filter by : Continents"
+     android:layout_margin="@dimen/all_margin" />
+  <HorizontalScrollView
+      android:id="@+id/filter_layout"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@+id/filter_text"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      >
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/filter_group"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="6"
+        app:singleSelection="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingEnd="@dimen/all_margin"
+        app:checkedButton="@id/all"
+        >
+      <Button
+          android:id="@+id/all"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="All"
+         />
+      <Button
+          android:id="@+id/africa"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Africa" />
+
+      <Button
+          android:id="@+id/asia"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:backgroundTint="@color/white"
+          android:text="Asia"
+          android:textSize="14dp"
+
+          />
+
+      <Button
+          android:id="@+id/euro"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Europe" />
+
+      <Button
+          android:id="@+id/aust"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Australia" />
+
+      <Button
+          android:id="@+id/southA"
+
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="South America" />
+
+      <Button
+          android:id="@+id/northA"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="North America"
+          android:layout_marginEnd="@dimen/all_margin"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+  </HorizontalScrollView>
 
   <FrameLayout
       android:id="@+id/fragment_layout"
-      android:layout_width="match_parent"
+      android:layout_width="0dp"
       android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/lottie_covid">
-
+      app:layout_constraintTop_toBottomOf="@+id/filter_layout">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_countries_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00DB2E2E" />
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <include
         android:id="@+id/noData_Layout"
         layout="@layout/no_data_layout" />
+
   </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

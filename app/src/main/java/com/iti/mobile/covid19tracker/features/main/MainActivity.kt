@@ -14,9 +14,9 @@ import com.iti.mobile.covid19tracker.features.base.Covid19App
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var  navController: NavController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNavigation()
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation (){
-//        binding.bottomNavigation.itemIconTintList = null
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
          NavigationUI.setupWithNavController(binding.bottomNavigation,navController)
     }

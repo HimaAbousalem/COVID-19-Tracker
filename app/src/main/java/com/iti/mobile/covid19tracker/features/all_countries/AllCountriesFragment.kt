@@ -2,8 +2,8 @@ package com.iti.mobile.covid19tracker.features.all_countries
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -58,9 +58,11 @@ class AllCountriesFragment : Fragment(), Clickable {
         setupSettingView()
         fetchData()
         setupToolbar()
+        setupSwipeToRefresh()
+        filterByContinent()
         return binding.root
     }
-
+     //setup views
     private fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = binding.appToolBar.appToolBar
@@ -77,7 +79,29 @@ class AllCountriesFragment : Fragment(), Clickable {
         binding.allCountriesRecyclerview.adapter = mergeAdapter
 
     }
+    private fun setupSettingView (){
+        dialog = Dialog( this.requireContext() )
+        dialog.setTitle("Settings")
+        settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
+        dialog.setContentView(settingsViewBinding.root)
+        setupNotification(settingsViewBinding,requireActivity(),dialog)
+        settingsViewBinding.cancelSetting.setOnClickListener {
+            dialog.dismiss()
+        }
 
+    }
+    private fun setupSwipeToRefresh (){
+        binding.swiperefreshItems.setOnRefreshListener {
+            //TODO:- update db
+            val handler = Handler()
+            handler.postDelayed({
+                if ( binding.swiperefreshItems.isRefreshing) {
+                    binding.swiperefreshItems.isRefreshing = false
+                }
+            }, 1000)
+        }
+    }
+    //show data
     private fun fetchData() {
         viewModel.countriesData.observe(requireActivity(), Observer { data ->
             if(data.isNotEmpty()){
@@ -90,32 +114,94 @@ class AllCountriesFragment : Fragment(), Clickable {
         })
 
     }
-    private fun setupSettingView (){
-        dialog = Dialog( this.requireContext() )
-        dialog.setTitle("Settings")
-        settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
-        dialog.setContentView(settingsViewBinding.root)
-        setupNotification(settingsViewBinding,requireActivity(),dialog)
-        settingsViewBinding.cancelSetting.setOnClickListener {
-            dialog.dismiss()
-        }
-
-    }
-
     private fun displayCountries(countriesList: List<Country>) {
         binding.allCountriesRecyclerview.visibility = View.VISIBLE
         binding.noDataLayout.noDataLayout.visibility = View.GONE
         countriesAdapter.countries = countriesList.toMutableList()
         mergeAdapter.adapters.last().notifyDataSetChanged()
     }
-
-    fun showNoDataLayout (){
+    private fun showNoDataLayout (){
         binding.allCountriesRecyclerview.visibility = View.GONE
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
     }
 
     //Search on countries
+    private fun filterByContinent (){
+        binding.filterGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            displayList.clear()
+            if(binding.all.id == checkedId){
+                if (isChecked){
+                    displayList.addAll(countriesList)
+                    displayCountries(displayList)
+                }
+            }
+            if(binding.africa.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Africa")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+            }
+            if (binding.asia.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Asia")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if(binding.aust.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Australia/Oceania")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if(binding.northA.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("North America")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if (binding.southA.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("South America")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+
+            }
+            if(binding.euro.id == checkedId){
+                if (isChecked){
+                    countriesList.forEach {
+                        if (it.continent.equals("Europe")) {
+                            displayList.add(it)
+                        }
+                        displayCountries(displayList)
+                    }
+                }
+            }
+        }
+    }
     private fun fromView(searchView: SearchView): MutableLiveData<String> {
         var liveData = MutableLiveData<String>()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -148,12 +234,11 @@ class AllCountriesFragment : Fragment(), Clickable {
         return liveData
     }
 
-
+    //app bar
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
             dialog.show()
@@ -165,6 +250,7 @@ class AllCountriesFragment : Fragment(), Clickable {
                 override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                     binding.lottieCovid.visibility = View.GONE
                     binding.viewColor.visibility = View.GONE
+                    binding.filterGroup.check(binding.all.id)
                     return true
                 }
 
