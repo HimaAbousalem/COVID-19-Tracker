@@ -28,6 +28,8 @@ fun makeStatusNotification(context: Context, changes: String) {
                 .setContentIntent(pendingIntent)
                 .setContentTitle("Covid19 App")
                 .setContentText(changes)
+                .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(changes))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
 
