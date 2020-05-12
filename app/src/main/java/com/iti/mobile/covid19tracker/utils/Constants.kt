@@ -18,7 +18,8 @@ const val TODAY_CASES = "today_cases"
 const val TODAY_DEATHS = "today_deaths"
 const val UPDATED = "updated"
 const val CRITICAL = "critical"
-
+const val UPDATE_KEY = "update"
+const val ENABLE_UPDATE_KEY = "enable_update"
 //WorkManager
 const val WORK_MANAGER_KEY = "SyncWork"
 
@@ -34,3 +35,4 @@ const val SETTINGS_REQUEST = 1
 const val UPDATE_ONE_HOUR : Long= 1
 const val UPDATE_TWO_HOUR : Long = 2
 const val UPDATE_DAY : Long = 24
+

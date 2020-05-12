@@ -28,4 +28,14 @@ class AllCountriesViewModel @Inject constructor(private val dataRepository: Data
     suspend fun pullToRefreshLogic(): String {
         return dataRepository.pullToRefreshLogic()
     }
+   val getNotificationSettings : LiveData<Long> = liveData {
+       emitSource(dataRepository.getNotificationSettings())
+   }
+
+    suspend fun  updateNotificationSettings (time:Long,isEnabled:Boolean){
+        dataRepository.updateNotificationSetting(time,isEnabled)
+    }
+
+
+
 }

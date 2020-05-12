@@ -73,4 +73,8 @@ class DataRepository @Inject constructor(
             return@withContext "Something went wrong"
         }
     }
+    suspend fun updateNotificationSetting (time:Long,isEnabled:Boolean){
+        sharedPreference.saveSettingNotificationUpdate(time,isEnabled)
+    }
+     fun getNotificationSettings () = sharedPreference.getNotificationUpdateHour()
 }

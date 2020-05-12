@@ -38,7 +38,6 @@ class AllCountriesFragment : Fragment(), Clickable {
     lateinit var displayList: MutableList<Country>
     lateinit var countriesList: List<Country>
     lateinit var mergeAdapter: MergeAdapter
-    var isUserNotInSearch = true
     var isFirstLoading = true
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,11 +81,16 @@ class AllCountriesFragment : Fragment(), Clickable {
 
     }
     private fun setupSettingView (){
+
         dialog = Dialog( this.requireContext() )
         dialog.setTitle("Settings")
         settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
         dialog.setContentView(settingsViewBinding.root)
-        setupNotification(settingsViewBinding,requireActivity(),dialog)
+        viewModel.getNotificationSettings.observe(requireActivity(), Observer { lastTime ->
+
+            settingsViewBinding.switchGroup.isChecked = lastTime != 0L
+            setupNotification(settingsViewBinding,requireActivity(),dialog,lastTime,this)
+        })
         settingsViewBinding.cancelSetting.setOnClickListener {
             dialog.dismiss()
         }
@@ -294,6 +298,11 @@ class AllCountriesFragment : Fragment(), Clickable {
         }
     }
 
+    override fun updateNotificationTime(time: Long, isEnabled: Boolean) {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.updateNotificationSettings(time,isEnabled)
+        }
+    }
 
 
 }
