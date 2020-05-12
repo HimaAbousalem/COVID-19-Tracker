@@ -13,15 +13,9 @@ import javax.inject.Inject
 class SharedPreferenceHandler @Inject constructor(private val sharedPref: SharedPreferences) {
     private lateinit var editor: SharedPreferences.Editor
     private val allResultsLiveData = MutableLiveData<AllResults>()
-    private val updateNotificationLiveData = MutableLiveData<Long>()
     private val prefChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-          if(key == UPDATE_KEY){
-              updateNotificationLiveData.postValue(postNotificationHour(sharedPreferences))
-          } else{
               allResultsLiveData.postValue(getAllCountriesResults(sharedPreferences))
-          }
-
         }
 
     init {
@@ -56,13 +50,19 @@ class SharedPreferenceHandler @Inject constructor(private val sharedPref: Shared
            editor.putLong(UPDATE_KEY, updateTime)
            editor.putBoolean(ENABLE_UPDATE_KEY,isEnabled)
            editor.apply()
+           editor.commit()
    }
-    fun getNotificationUpdateHour (): LiveData<Long> {
-        if (updateNotificationLiveData.value == null) updateNotificationLiveData.postValue(postNotificationHour(sharedPref))
-        return updateNotificationLiveData
+    fun getNotificationUpdateHour (): Long {
+        return postNotificationHour(sharedPref)
+    }
+
+    fun getNotificationStatus () : Boolean {
+        //false means is not enabled
+        return  sharedPref.getBoolean(ENABLE_UPDATE_KEY,true)
     }
     private fun postNotificationHour (sharedPref: SharedPreferences) :Long {
        if (sharedPref.getBoolean(ENABLE_UPDATE_KEY,true)){
+
            return sharedPref.getLong(UPDATE_KEY, DEFAULT_UPDATE_TIME)
        }
         //if notifications isn't enabled

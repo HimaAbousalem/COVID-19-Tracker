@@ -23,6 +23,7 @@ import com.iti.mobile.covid19tracker.extension.toast
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.Country
+import com.iti.mobile.covid19tracker.model.repositories.DataRepository
 import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.setupNotification
 import kotlinx.coroutines.*
@@ -32,6 +33,8 @@ import javax.inject.Inject
 class AllCountriesFragment : Fragment(), Clickable {
     @Inject
     lateinit var viewmodelFactory: ViewModelProvidersFactory
+    @Inject
+    lateinit var dataRepository: DataRepository
     lateinit var viewModel: AllCountriesViewModel
     private lateinit var binding: FragmentAllCountriesBinding
     lateinit var countriesAdapter: CountriesAdapter
@@ -88,15 +91,9 @@ class AllCountriesFragment : Fragment(), Clickable {
         dialog.setTitle("Settings")
         settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
         dialog.setContentView(settingsViewBinding.root)
-        viewModel.getNotificationSettings.observe(requireActivity(), Observer { lastTime ->
-
-            settingsViewBinding.switchGroup.isChecked = lastTime != 0L
-            setupNotification(settingsViewBinding,requireActivity(),dialog,lastTime,this)
-        })
         settingsViewBinding.cancelSetting.setOnClickListener {
             dialog.dismiss()
         }
-
     }
     private fun setupSwipeToRefresh (){
         binding.swiperefreshItems.setOnRefreshListener {
@@ -254,6 +251,9 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem) {
+            val time =  dataRepository.getNotificationSettings()
+            settingsViewBinding.switchGroup.isChecked = time != 0L
+            setupNotification(settingsViewBinding,requireActivity(),dialog,time,this)
             dialog.show()
             return true
         }
@@ -304,9 +304,8 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
 
     override fun updateNotificationTime(time: Long, isEnabled: Boolean) {
-        CoroutineScope(Dispatchers.IO).launch {
             viewModel.updateNotificationSettings(time,isEnabled)
-        }
+
     }
 
 

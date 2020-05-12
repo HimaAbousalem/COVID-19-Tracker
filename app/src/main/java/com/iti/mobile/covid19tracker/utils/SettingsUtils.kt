@@ -15,7 +15,6 @@ import com.iti.mobile.covid19tracker.extension.toast
 fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: Dialog,lastTime:Long, clickable: Clickable) {
     var buttonTime : Long = 0
     binding.toggleButtonGroup.visibility = View.VISIBLE
-   // binding.toggleButtonGroup.dispatchSetSelected(true)
     binding.toggleButtonGroup.forEach { button ->
         button.setOnClickListener { (button as MaterialButton).isChecked = true }
     }
@@ -33,24 +32,24 @@ fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: 
         if(binding.button1.id == checkedId){
           if (isChecked){
               buttonTime = UPDATE_ONE_HOUR
-              binding.updateSetting.isEnabled = true
           }
         }
         if (binding.button2.id == checkedId){
             if (isChecked){
                 buttonTime = UPDATE_TWO_HOUR
-            binding.updateSetting.isEnabled = true
            }
         }
         if(binding.button3.id == checkedId){
             if (isChecked){
                 buttonTime = UPDATE_DAY
-                binding.updateSetting.isEnabled = true
             }
         }
+        binding.updateSetting.isEnabled = buttonTime != lastTime
     }
     binding.switchGroup.setOnCheckedChangeListener { buttonView, isChecked ->
-        binding.updateSetting.isEnabled = true
+
+        binding.updateSetting.isEnabled = lastTime != 0L
+
         if (isChecked)
         {
             binding.toggleButtonGroup.visibility = View.VISIBLE
@@ -67,7 +66,7 @@ fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: 
             clickable.updateNotificationTime(buttonTime,true)
             context.toast("You will be notified after ${buttonTime}-Hour")
         } else {
-            //TODO:- not showing notification
+            scheduleWork(DEFAULT_UPDATE_TIME, context, SETTINGS_REQUEST)
             clickable.updateNotificationTime(0,false)
             context.toast("You won't be notified anymore!")
         }

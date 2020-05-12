@@ -17,6 +17,7 @@ import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.model.entities.CountryHistory
+import com.iti.mobile.covid19tracker.model.repositories.DataRepository
 import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.setupNotification
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +34,8 @@ class SubscriptionsFragment : Fragment(), Clickable {
     lateinit var binding: FragmentSubscriptionsBinding
     @Inject
     lateinit var viewModelFactory: ViewModelProvidersFactory
+    @Inject
+    lateinit var dataRepository: DataRepository
     lateinit var viewModel: SubscriptionsViewModel
     private lateinit var dialog: Dialog
     private lateinit var settingsViewBinding: SettingsViewBinding
@@ -91,11 +94,6 @@ class SubscriptionsFragment : Fragment(), Clickable {
         dialog.setTitle("Settings")
         settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
         dialog.setContentView(settingsViewBinding.root)
-        viewModel.getNotificationSettings.observe(requireActivity(), Observer { lastTime ->
-
-            settingsViewBinding.switchGroup.isChecked = lastTime != 0L
-            setupNotification(settingsViewBinding,requireActivity(),dialog,lastTime,this)
-        })
         settingsViewBinding.cancelSetting.setOnClickListener {
             dialog.dismiss()
         }
@@ -107,6 +105,9 @@ class SubscriptionsFragment : Fragment(), Clickable {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settingsMenuItem2) {
+            val time =  dataRepository.getNotificationSettings()
+            settingsViewBinding.switchGroup.isChecked = time != 0L
+            setupNotification(settingsViewBinding,requireActivity(),dialog,time,this)
             dialog.show()
             return true
         }
