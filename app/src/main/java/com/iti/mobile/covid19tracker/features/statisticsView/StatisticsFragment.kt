@@ -50,7 +50,7 @@ class StatisticsFragment : Fragment() {
                 viewModel.getAllHistory()
             }
         }
-        viewModel.statisticsData.observe(requireActivity(), Observer {
+        viewModel.getAllHistory().observe(requireActivity(), Observer {
             when (it) {
                 is LoadingState -> {
                     if (it.loading) {
@@ -90,10 +90,8 @@ class StatisticsFragment : Fragment() {
         binding.chart.visibility = View.GONE
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = text
-        binding.noDataLayout.retryAgainButton.visibility = View.GONE
         if (status == 0) {
             binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
-            binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
         }
     }
 }
