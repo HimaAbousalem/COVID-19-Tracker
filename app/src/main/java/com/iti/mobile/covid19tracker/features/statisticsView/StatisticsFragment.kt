@@ -16,6 +16,7 @@ import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.*
 import com.iti.mobile.covid19tracker.utils.drawCountryHistoryData
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class StatisticsFragment : Fragment() {
     @Inject
     lateinit var viewmodelFactory: ViewModelProvidersFactory
     lateinit var viewModel: StatisticsViewModel
-    lateinit var countryHistoryDeferred: Deferred<CountryHistoryDetails>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,12 +42,18 @@ class StatisticsFragment : Fragment() {
             )
         ).inject(this)
         viewModel = ViewModelProvider(this, viewmodelFactory).get(StatisticsViewModel::class.java)
-
-        viewModel.getAllHistory().observe(requireActivity(), Observer {
+        CoroutineScope(IO).launch {
+            viewModel.getAllHistory()
+        }
+        binding.noDataLayout.retryAgainButton.setOnClickListener {
+            CoroutineScope(IO).launch {
+                viewModel.getAllHistory()
+            }
+        }
+        viewModel.statisticsData.observe(requireActivity(), Observer {
             when (it) {
                 is LoadingState -> {
                     if (it.loading) {
-                        // Timber.d("Loading")
                         setupNoData("Loading data .....", 1)
                     } else {
                         Timber.d("Finish Loading")
@@ -83,8 +90,10 @@ class StatisticsFragment : Fragment() {
         binding.chart.visibility = View.GONE
         binding.noDataLayout.noDataLayout.visibility = View.VISIBLE
         binding.noDataLayout.noDataTextView.text = text
+        binding.noDataLayout.retryAgainButton.visibility = View.GONE
         if (status == 0) {
             binding.noDataLayout.noDataTextView.text = "No Internet Connection is available!"
+            binding.noDataLayout.retryAgainButton.visibility = View.VISIBLE
         }
     }
 }
