@@ -10,9 +10,9 @@ import com.iti.mobile.covid19tracker.model.repositories.DataRepository
 import javax.inject.Inject
 
 class AllCountriesViewModel @Inject constructor(private val dataRepository: DataRepository): ViewModel(){
-//    suspend fun updateDatabase() {
-//        dataRepository.updateDataBase()
-//    }
+    suspend fun updateDatabase() {
+        dataRepository.updateDataBase()
+    }
 
     val countriesData: LiveData<List<Country>> = liveData {
         emitSource(dataRepository.getCountriesData())
@@ -24,6 +24,9 @@ class AllCountriesViewModel @Inject constructor(private val dataRepository: Data
 
     suspend fun updateCountry(country: Country){
         dataRepository.updateCountrySubscription(country)
+    }
+    suspend fun pullToRefreshLogic(): String {
+        return dataRepository.pullToRefreshLogic()
     }
    val getNotificationSettings : LiveData<Long> = liveData {
        emitSource(dataRepository.getNotificationSettings())

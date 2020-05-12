@@ -32,6 +32,7 @@ fun makeStatusNotification(context: Context, changes: String) {
                 .bigText(changes))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
+                .setAutoCancel(true)
 
        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
        // return builder.build()

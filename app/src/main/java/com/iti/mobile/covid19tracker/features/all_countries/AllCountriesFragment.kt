@@ -17,14 +17,13 @@ import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.extension.hideKeyboard
+import com.iti.mobile.covid19tracker.extension.toast
 import com.iti.mobile.covid19tracker.features.base.Covid19App
 import com.iti.mobile.covid19tracker.features.base.ViewModelProvidersFactory
 import com.iti.mobile.covid19tracker.model.entities.Country
 import com.iti.mobile.covid19tracker.utils.Clickable
 import com.iti.mobile.covid19tracker.utils.setupNotification
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -99,13 +98,15 @@ class AllCountriesFragment : Fragment(), Clickable {
     }
     private fun setupSwipeToRefresh (){
         binding.swiperefreshItems.setOnRefreshListener {
-            //TODO:- update db
-            val handler = Handler()
-            handler.postDelayed({
-                if ( binding.swiperefreshItems.isRefreshing()) {
-                    binding.swiperefreshItems.setRefreshing(false)
+            CoroutineScope(Dispatchers.IO).launch {
+                var result= viewModel.pullToRefreshLogic()
+                withContext(Dispatchers.Main) {
+                    activity?.toast(result)
                 }
-            }, 1000)
+                if ( binding.swiperefreshItems.isRefreshing) {
+                    binding.swiperefreshItems.isRefreshing = false
+                }
+            }
         }
     }
     //show data
@@ -127,7 +128,6 @@ class AllCountriesFragment : Fragment(), Clickable {
         binding.allCountriesRecyclerview.visibility = View.VISIBLE
         binding.noDataLayout.noDataLayout.visibility = View.GONE
         countriesAdapter.countries = countriesList.toMutableList()
-        mergeAdapter.adapters.last().notifyDataSetChanged()
         mergeAdapter.adapters.last().notifyDataSetChanged()
     }
     private fun showNoDataLayout (){
@@ -229,15 +229,16 @@ class AllCountriesFragment : Fragment(), Clickable {
                 return false
             }
         })
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                hideKeyboard();
-                binding.lottieCovid.visibility = View.VISIBLE
-                binding.viewColor.visibility = View.VISIBLE
-                return true
-            }
-
-        })
+        searchView.setOnCloseListener {
+            hideKeyboard()
+            binding.lottieCovid.visibility = View.VISIBLE
+            binding.viewColor.visibility = View.VISIBLE
+            true
+        }
+        searchView.setOnCloseListener{
+            hideKeyboard()
+            true
+        }
         return liveData
     }
 

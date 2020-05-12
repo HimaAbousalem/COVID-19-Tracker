@@ -1,6 +1,5 @@
 package com.iti.mobile.covid19tracker.features.main
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation (){
-//        binding.bottomNavigation.itemIconTintList = null
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
          NavigationUI.setupWithNavController(binding.bottomNavigation,navController)
     }
