@@ -1,6 +1,7 @@
 package com.iti.mobile.covid19tracker.features.statisticsView
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.iti.mobile.covid19tracker.model.entities.*
