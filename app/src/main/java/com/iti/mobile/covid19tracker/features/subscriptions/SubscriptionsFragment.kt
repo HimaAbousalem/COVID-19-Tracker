@@ -83,4 +83,8 @@ class SubscriptionsFragment : Fragment(), Clickable {
         }
     }
 
+    override fun updateNotificationTime(time: Long, isEnabled: Boolean) {
+        TODO("Not yet implemented")
+    }
+
 }

@@ -56,4 +56,8 @@ class DataRepository @Inject constructor(
     suspend fun getAllHistory () : CountryHistoryDetails {
         return covidApi.getAllHistory()
     }
+    suspend fun updateNotificationSetting (time:Long,isEnabled:Boolean){
+        sharedPreference.saveSettingNotificationUpdate(time,isEnabled)
+    }
+     fun getNotificationSettings () = sharedPreference.getNotificationUpdateHour()
 }

@@ -6,4 +6,5 @@ import com.iti.mobile.covid19tracker.model.entities.CountryHistory
 
 interface Clickable {
     fun onItemClick(country: Country)
+    fun updateNotificationTime (time : Long , isEnabled : Boolean)
 }
