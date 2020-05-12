@@ -6,12 +6,14 @@ import android.os.Handler
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.MergeAdapter
+import com.google.android.material.button.MaterialButton
 import com.iti.mobile.covid19tracker.R
 import com.iti.mobile.covid19tracker.dagger.modules.controller.ControllerModule
 import com.iti.mobile.covid19tracker.databinding.FragmentAllCountriesBinding
@@ -138,6 +140,9 @@ class AllCountriesFragment : Fragment(), Clickable {
 
     //Search on countries
     private fun filterByContinent (){
+        binding.filterGroup.forEach { button ->
+            button.setOnClickListener { (button as MaterialButton).isChecked = true }
+        }
         binding.filterGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             displayList.clear()
             if(binding.all.id == checkedId){

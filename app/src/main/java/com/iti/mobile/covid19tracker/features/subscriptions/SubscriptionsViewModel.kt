@@ -16,4 +16,11 @@ class SubscriptionsViewModel @Inject constructor(private val repository: DataRep
     suspend fun updateCountry(country: Country){
         repository.updateCountrySubscription(country)
     }
+    val getNotificationSettings : LiveData<Long> = liveData {
+        emitSource(repository.getNotificationSettings())
+    }
+
+    suspend fun  updateNotificationSettings (time:Long,isEnabled:Boolean){
+        repository.updateNotificationSetting(time,isEnabled)
+    }
 }

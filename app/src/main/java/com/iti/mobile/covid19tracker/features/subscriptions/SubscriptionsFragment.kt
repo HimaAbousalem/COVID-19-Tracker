@@ -91,7 +91,11 @@ class SubscriptionsFragment : Fragment(), Clickable {
         dialog.setTitle("Settings")
         settingsViewBinding = SettingsViewBinding.inflate(layoutInflater)
         dialog.setContentView(settingsViewBinding.root)
-        setupNotification(settingsViewBinding,requireActivity(),dialog)
+        viewModel.getNotificationSettings.observe(requireActivity(), Observer { lastTime ->
+
+            settingsViewBinding.switchGroup.isChecked = lastTime != 0L
+            setupNotification(settingsViewBinding,requireActivity(),dialog,lastTime,this)
+        })
         settingsViewBinding.cancelSetting.setOnClickListener {
             dialog.dismiss()
         }
@@ -110,7 +114,9 @@ class SubscriptionsFragment : Fragment(), Clickable {
     }
 
     override fun updateNotificationTime(time: Long, isEnabled: Boolean) {
-        TODO("Not yet implemented")
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.updateNotificationSettings(time,isEnabled)
+        }
     }
 
 }

@@ -4,7 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.forEach
 import androidx.core.view.get
+import com.google.android.material.button.MaterialButton
 import com.iti.mobile.covid19tracker.databinding.SettingsViewBinding
 import com.iti.mobile.covid19tracker.features.base.scheduleWork
 import timber.log.Timber
@@ -14,6 +16,9 @@ fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: 
     var buttonTime : Long = 0
     binding.toggleButtonGroup.visibility = View.VISIBLE
    // binding.toggleButtonGroup.dispatchSetSelected(true)
+    binding.toggleButtonGroup.forEach { button ->
+        button.setOnClickListener { (button as MaterialButton).isChecked = true }
+    }
     binding.updateSetting.isEnabled = false
     if (lastTime == UPDATE_ONE_HOUR){
         binding.toggleButtonGroup.check(binding.button1.id)
@@ -60,11 +65,13 @@ fun setupNotification (binding: SettingsViewBinding , context: Context, dialog: 
         if (buttonTime != 0L) {
             scheduleWork(buttonTime, context, SETTINGS_REQUEST)
             clickable.updateNotificationTime(buttonTime,true)
+            context.toast("You will be notified after ${buttonTime}-Hour")
         } else {
             //TODO:- not showing notification
             clickable.updateNotificationTime(0,false)
+            context.toast("You won't be notified anymore!")
         }
         dialog.dismiss()
-        context.toast("You will be notified after ${buttonTime}-Hour")
+
     }
 }
